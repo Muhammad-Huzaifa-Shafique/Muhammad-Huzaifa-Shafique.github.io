@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muhammad Huzaifa Shafique | AI and machine learning portfolio</title>
+<meta name="description" content="Graduate student in AI at Pittsburg State University, looking for AI/ML engineer roles. Retrieval, forecasting and threat-triage projects in Python, published with their limits.">
+<link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/">
+<meta name="theme-color" content="#F3F6FA">
+<meta name="color-scheme" content="light">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Muhammad Huzaifa Shafique | AI and machine learning portfolio">
+<meta property="og:description" content="Retrieval, forecasting and threat-triage projects in Python, published with their limits.">
+<meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23F3F6FA'/%3E%3Crect x='6' y='7' width='20' height='5' rx='1.5' fill='%237F8CA8'/%3E%3Crect x='6' y='14' width='15' height='5' rx='1.5' fill='%237F8CA8'/%3E%3Crect x='6' y='21' width='10' height='5' rx='1.5' fill='%232745C9'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&amp;family=Fira+Sans:wght@400;500;600&amp;display=swap">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Muhammad Huzaifa Shafique",
+  "url": "https://muhammad-huzaifa-shafique.github.io/",
+  "jobTitle": "Graduate student, AI and machine learning",
+  "affiliation": { "@type": "CollegeOrUniversity", "name": "Pittsburg State University" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "COMSATS University Islamabad" },
+  "sameAs": [
+    "https://github.com/Muhammad-Huzaifa-Shafique",
+    "https://www.linkedin.com/in/muhammad-huzaifa-shafique"
+  ],
+  "knowsAbout": ["Machine learning", "Retrieval-augmented generation", "Time-series forecasting", "Large language models", "Python", "Cybersecurity"]
+}
+</script>
+<style>
+:root {
+  --paper: #F3F6FA;
+  --ink: #0E1F3A;
+  --ink-2: #46526B;
+  --blue: #2745C9;
+  --blue-deep: #1B33A3;
+  --bar: #7F8CA8;
+  --mark: #FFE680;
+  --rule: #D3DBE8;
+
+  --serif: "Bitter", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "Fira Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --pad: clamp(1.25rem, 4vw, 2.5rem);
+  --gap: clamp(1.5rem, 3.4vw, 3rem);
+  --rail: 9.5rem;
+  --note: 15rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.68 var(--serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a { color: var(--blue); text-decoration-thickness: .08em; text-underline-offset: .18em; }
+a:hover { color: var(--blue-deep); }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 2px; }
+p { margin: 0 0 1rem; }
+.wrap { width: min(100% - 2 * var(--pad), 71rem); margin-inline: auto; }
+
+.skip {
+  position: absolute; left: var(--pad); top: -4rem; z-index: 10;
+  background: var(--ink); color: #fff; padding: .6rem 1rem;
+  font: 500 .9375rem/1 var(--sans); text-decoration: none;
+}
+.skip:focus { top: .75rem; }
+
+/* Header */
+.top { padding-block: 1.25rem; }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 2rem; }
+.name { font: 600 1rem/1.2 var(--sans); color: var(--ink); text-decoration: none; }
+.top ul { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; list-style: none; margin: 0; padding: 0; font: 500 .9375rem/1.2 var(--sans); }
+.top ul a { display: inline-block; padding: .4rem 0; color: var(--ink-2); text-decoration: none; }
+.top ul a:hover { color: var(--ink); text-decoration: underline; }
+
+/* Hero */
+.hero { padding-block: clamp(2.25rem, 6vw, 5rem) clamp(2.5rem, 6vw, 5rem); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+h1 {
+  margin: 0 0 1.5rem;
+  font: 700 clamp(2.5rem, 5.4vw, 4.1rem)/1.05 var(--serif);
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.lede { max-width: 34rem; margin: 0 0 1rem; font-size: 1.1875rem; line-height: 1.6; }
+.facts { margin: 0 0 1.75rem; font: 400 .9375rem/1.55 var(--sans); color: var(--ink-2); }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.btn {
+  display: inline-block; padding: .7rem 1.15rem;
+  font: 500 .9375rem/1.2 var(--sans); text-decoration: none;
+  border: 2px solid var(--blue); border-radius: 3px;
+}
+.btn-solid { background: var(--blue); color: #fff; }
+.btn-solid:hover { background: var(--blue-deep); border-color: var(--blue-deep); color: #fff; }
+.btn-line { color: var(--blue); }
+.btn-line:hover { background: rgba(39, 69, 201, .08); }
+
+/* The one figure */
+.fig { margin: 0; padding-top: 1.1rem; border-top: 3px solid var(--ink); }
+.fig figcaption { margin: 0 0 1.1rem; font: 500 1rem/1.4 var(--sans); }
+.chart { width: 100%; border-collapse: collapse; font-family: var(--sans); }
+.chart th { width: 1%; padding: .42rem 1rem .42rem 0; font-size: .9375rem; font-weight: 400; text-align: left; white-space: nowrap; }
+.chart td { padding: .42rem 0; }
+.chart .num { width: 1%; padding-left: .75rem; font-size: .9375rem; font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-2); }
+.bar {
+  display: block; height: 1.1rem; width: calc(var(--v) / 125 * 100%);
+  background: var(--bar); border-radius: 2px; transform-origin: left center;
+  animation: grow .85s cubic-bezier(.2, .7, .2, 1) both;
+  animation-delay: calc(var(--i) * 90ms + 250ms);
+}
+.chart .win th, .chart .win .num { color: var(--ink); font-weight: 600; }
+.chart .win .bar { background: var(--blue); }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.fig-note { margin: 1rem 0 0; font: 400 .9375rem/1.6 var(--sans); color: var(--ink-2); }
+.fig-limit { margin: .9rem 0 0; font: 400 1rem/1.75 var(--sans); }
+.fig-link { margin: .75rem 0 0; font: 500 .9375rem/1.4 var(--sans); }
+
+/* Highlighter: used only for limits */
+.hl {
+  background: linear-gradient(to bottom, transparent .1em, var(--mark) .1em, var(--mark) .95em, transparent .95em);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  padding: 0 .3em; margin-inline: -.3em;
+}
+
+/* Sections: heading in a left rail, content to the right */
+.sec { padding-block: clamp(2.25rem, 5vw, 3.75rem); }
+.sec > .wrap { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+.sec h2 { margin: 0; font: 700 1.5rem/1.25 var(--serif); letter-spacing: -.01em; }
+
+.proj { display: grid; grid-template-columns: minmax(0, 1fr) var(--note); gap: var(--gap); }
+.proj + .proj { margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--rule); }
+.proj h3 { margin: 0 0 .85rem; font: 700 1.5rem/1.25 var(--serif); letter-spacing: -.01em; text-wrap: balance; }
+.proj-main p { max-width: 40rem; }
+.proj strong { font-weight: 600; }
+.shows { margin: 1.25rem 0 .75rem; font: 400 .9375rem/1.55 var(--sans); color: var(--ink-2); }
+.links { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin: 0; padding: 0; list-style: none; font: 500 .9375rem/1.4 var(--sans); }
+.limit { margin: .35rem 0 0; font: 400 .9375rem/1.75 var(--sans); }
+.limit strong { font-weight: 600; }
+
+.skills { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1.4rem 2rem; margin: 0; font-family: var(--sans); }
+.skills dt { font-size: .9375rem; font-weight: 600; line-height: 1.6; }
+.skills dd { margin: 0; max-width: 42rem; line-height: 1.65; }
+
+.rows { display: grid; gap: 1.4rem; margin: 0; padding: 0; list-style: none; }
+.rows li { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: .15rem 2rem; max-width: 52rem; }
+.rows .when { font: 400 .9375rem/1.7 var(--sans); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.rows .what { margin: 0; font-weight: 600; line-height: 1.5; }
+.rows .where { display: block; font: 400 .9375rem/1.6 var(--sans); color: var(--ink-2); font-weight: 400; }
+.sub { margin-top: 2.25rem; font: 600 .9375rem/1.5 var(--sans); }
+
+.contact p { max-width: 36rem; }
+
+.foot { padding-block: 2.5rem 3.5rem; color: var(--ink-2); font: 400 .875rem/1.5 var(--sans); }
+
+/* Narrower screens */
+@media (max-width: 62rem) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); }
+  .sec > .wrap { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .proj { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .limit { max-width: 40rem; }
+}
+@media (max-width: 40rem) {
+  body { font-size: 1rem; }
+  .skills, .rows li { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+  .skills dd { margin-bottom: .75rem; }
+  .top ul { gap: .25rem 1rem; font-size: .875rem; }
+  .chart th { font-size: .8125rem; padding-right: .6rem; }
+  .chart .num { font-size: .8125rem; padding-left: .5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bar { animation: none; }
+}
+@media print {
+  .top ul, .skip { display: none; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="name" href="#">Muhammad Huzaifa Shafique</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#background">Background</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" aria-labelledby="top-heading">
+  <div class="wrap">
+    <div>
+      <h1 id="top-heading">Machine learning you can check.</h1>
+      <p class="lede">I'm a graduate student in AI at Pittsburg State University, and I'm looking for AI/ML engineer roles. I build retrieval, forecasting and triage systems in Python, measure them where I can, and publish where they fall short.</p>
+      <p class="facts">Master of Science in Technology with an emphasis in AI. GPA 4.0. Graduating December 2026.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="https://github.com/Muhammad-Huzaifa-Shafique">See my code on GitHub</a>
+        <a class="btn btn-line" href="https://www.linkedin.com/in/muhammad-huzaifa-shafique">Connect on LinkedIn</a>
+      </div>
+    </div>
+
+    <figure class="fig" aria-labelledby="fig-title">
+      <figcaption id="fig-title">Forecast error on 12 months of sales the model had not seen. Lower is better.</figcaption>
+      <table class="chart" aria-labelledby="fig-title">
+        <tbody>
+          <tr><th scope="row">Last month</th><td><span class="bar" style="--v:119.8;--i:0"></span></td><td class="num">119.8</td></tr>
+          <tr><th scope="row">3-month average</th><td><span class="bar" style="--v:112.1;--i:1"></span></td><td class="num">112.1</td></tr>
+          <tr><th scope="row">12-month average</th><td><span class="bar" style="--v:102.0;--i:2"></span></td><td class="num">102.0</td></tr>
+          <tr><th scope="row">Same month last year</th><td><span class="bar" style="--v:89.6;--i:3"></span></td><td class="num">89.6</td></tr>
+          <tr class="win"><th scope="row">Neural network</th><td><span class="bar" style="--v:78.7;--i:4"></span></td><td class="num">78.7</td></tr>
+        </tbody>
+      </table>
+      <p class="fig-note">Weighted absolute percentage error per item per month. Every model misses by a lot because demand for a single item is lumpy, so the gap between models is the result.</p>
+      <p class="fig-limit"><span class="hl"><strong>Limit.</strong> The neural network still under-forecasts total volume by 37%, almost all of it from one bulk order in November 2023.</span></p>
+      <p class="fig-link"><a href="#sales-forecasting">How I tested it</a></p>
+    </figure>
+  </div>
+</section>
+
+<section class="sec" id="projects" aria-labelledby="projects-h">
+  <div class="wrap">
+    <h2 id="projects-h">Projects</h2>
+    <div>
+
+      <article class="proj" id="casefile">
+        <div class="proj-main">
+          <h3>Casefile: a local assistant for penetration-testing notes</h3>
+          <p>Casefile answers penetration-testing questions from public documentation (the HackTricks wiki and tool manual pages) and shows which passages each answer came from. Everything runs on my own computer: Ollama serves Llama 3.1 8B, and the vectors live in a Chroma database.</p>
+          <p><strong>What I built.</strong> The whole pipeline: collect, chunk, embed, search, answer and check. I indexed the same 22,720 chunks with three embedding setups and ran seven test questions through all of them. I also wrote a citation checker, with 58 unit tests, that confirms every [n] citation points at a passage that was actually retrieved.</p>
+          <p><strong>What I found.</strong> The embedding setup changes what the answer model gets to read. The three setups never agreed on all five top chunks, and on four of the seven questions they shared at most one. One question was deliberately off-topic (baking sourdough bread), and every setup gave it the lowest top-1 similarity of the seven.</p>
+          <p class="shows">Relevant to: retrieval-augmented generation, embeddings, vector search, local LLMs, evaluation.</p>
+          <ul class="links"><li><a href="https://github.com/Muhammad-Huzaifa-Shafique/Penetration_Testing">Source code</a></li></ul>
+        </div>
+        <aside class="limit" aria-label="Limit"><span class="hl"><strong>Limit.</strong> Seven questions are a smoke test, not a benchmark, and similarity scores can't be compared across models. Next step: an answer key and recall@k for every embedder.</span></aside>
+      </article>
+
+      <article class="proj" id="sales-forecasting">
+        <div class="proj-main">
+          <h3>Sales forecasting with a neural network</h3>
+          <p>A scikit-learn neural network that forecasts monthly sales for ten items from 2019 to 2024 order history. The data is a company's and stays private; the code and the error figures are public.</p>
+          <p><strong>What I built.</strong> I cleaned 49,272 order lines (117 partial-month, zero-quantity and duplicate rows removed), built lag, rolling-average and seasonal features, and trained five versions of the model. The final one pools all ten items, works on log-scaled values and averages ten random seeds. I tested it on the last 12 months, which it never saw, against four baselines, and dropped one variant (a bias correction) because it made the error worse.</p>
+          <p><strong>What I found.</strong> The final model's error is about 12% lower than the best baseline (78.7% against 89.6% for repeating the same month last year), and about 27% lower once the bulk order is set aside (66.7% against 91.9%). Against the best baseline, it has the lower error on six of the ten items over the full year, and on eight of ten without the bulk-order month.</p>
+          <p class="shows">Relevant to: time-series features, model evaluation against baselines, honest reporting.</p>
+          <ul class="links"><li><a href="https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network">Source code</a></li></ul>
+        </div>
+        <aside class="limit" aria-label="Limit"><span class="hl"><strong>Limit.</strong> It under-forecasts total volume by 37%, or about 1.5% without the bulk-order month. There is one hold-out period and only ten items, so read the model ranking as a hint, not a verdict.</span></aside>
+      </article>
+
+      <article class="proj" id="cyberai">
+        <div class="proj-main">
+          <h3>CyberAI: threat triage for links, emails and PDFs</h3>
+          <p>CyberAI checks whether a link, email or PDF looks safe and returns Clean, Suspicious or Malware, with the reasons. It runs from the command line or a small Flask web page, keeps a SQLite history and exports PDF reports.</p>
+          <p><strong>What I built.</strong> One score from many signals: VirusTotal reports, DNS records, domain registration data, spam blocklists, SPF, DMARC and DKIM checks, look-alike domains and phishing wording. Each finding adds points, and the verdict lists the findings behind the total.</p>
+          <p><strong>What it shows.</strong> How to turn messy signals from different services into one decision, and keep that decision explainable.</p>
+          <p class="shows">Relevant to: feature design from mixed data sources, API integration, serving results.</p>
+          <ul class="links"><li><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code</a></li></ul>
+        </div>
+        <aside class="limit" aria-label="Limit"><span class="hl"><strong>Limit.</strong> The point values are set by hand, not learned from data, so I can't report precision or recall yet. Next step: train a classifier on public phishing data and compare it with this score.</span></aside>
+      </article>
+
+      <article class="proj" id="gapminder">
+        <div class="proj-main">
+          <h3>Gapminder dashboard: 55 years of life expectancy and income</h3>
+          <p>An animated Quarto report, built with R and Plotly for a data-visualization course, on how life expectancy and income changed in 142 countries between 1952 and 2007.</p>
+          <p><strong>What I found.</strong> Population-weighted life expectancy rose on every continent. Asia gained the most, from 42.9 to 69.4 years, and the gap between the highest and lowest continent narrowed from 30.4 to 26.5 years.</p>
+          <p><strong>What I chose.</strong> The continent chart weights each country by its population, because a plain average would count a small country the same as China or India.</p>
+          <p class="shows">Relevant to: exploratory analysis, picking the right aggregate, explaining results to non-specialists.</p>
+          <ul class="links">
+            <li><a href="https://muhammad-huzaifa-shafique.github.io/Dashboard/Animation_data.html">Live report</a></li>
+            <li><a href="https://github.com/Muhammad-Huzaifa-Shafique/Dashboard">Source code</a></li>
+          </ul>
+        </div>
+        <aside class="limit" aria-label="Limit"><span class="hl"><strong>Limit.</strong> The data stops in 2007 and is sampled every five years.</span></aside>
+      </article>
+
+      <article class="proj" id="extractor">
+        <div class="proj-main">
+          <h3>Fixed-width data extractor</h3>
+          <p>A Python script that turns fixed-width text reports into clean Excel tables. It finds the columns from the header, rebuilds rows that wrap across several lines, and formats the sheet.</p>
+          <p><strong>What it shows.</strong> Data preparation, the unglamorous first step of most ML work. I built it with a classmate for a graduate course, and our outputs matched.</p>
+          <p class="shows">Relevant to: data cleaning and preparation.</p>
+          <ul class="links"><li><a href="https://github.com/Muhammad-Huzaifa-Shafique/Fixed-Width-Data-Extractor">Source code</a></li></ul>
+        </div>
+        <aside class="limit" aria-label="Limit"><span class="hl"><strong>Limit.</strong> The layout rules (three header lines, a new record when column 19 is filled) fit that course report, not every fixed-width file.</span></aside>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="skills" aria-labelledby="skills-h">
+  <div class="wrap">
+    <h2 id="skills-h">Skills</h2>
+    <dl class="skills">
+      <dt>Machine learning and LLMs</dt>
+      <dd>scikit-learn (neural networks, ensembles), time-series features, model evaluation, retrieval-augmented generation (RAG), embeddings and vector search (Chroma), prompt engineering, local LLMs (Ollama, Llama 3.1), retrieval evaluation</dd>
+      <dt>Python and data</dt>
+      <dd>Python, Pandas, NumPy, SQL, R, Quarto and Plotly, REST APIs, Flask, SQLite, unit testing, Git</dd>
+      <dt>Security</dt>
+      <dd>Penetration testing, vulnerability assessment, threat intelligence, Kali Linux, Nmap, Metasploit</dd>
+    </dl>
+  </div>
+</section>
+
+<section class="sec" id="background" aria-labelledby="background-h">
+  <div class="wrap">
+    <h2 id="background-h">Background</h2>
+    <div>
+      <ul class="rows">
+        <li>
+          <span class="when">Aug 2025 to Dec 2026 (expected)</span>
+          <p class="what">Master of Science in Technology, emphasis in AI<span class="where">Pittsburg State University, Kansas. GPA 4.0 out of 4.0.</span></p>
+        </li>
+        <li>
+          <span class="when">Aug 2026 to present</span>
+          <p class="what">Graduate Teaching Assistant<span class="where">Pittsburg State University</span></p>
+        </li>
+        <li>
+          <span class="when">Aug 2023 to Jan 2024</span>
+          <p class="what">Laboratory Teaching Assistant<span class="where">COMSATS University Islamabad, Pakistan</span></p>
+        </li>
+        <li>
+          <span class="when">2019 to 2023</span>
+          <p class="what">B.Sc. in Physics<span class="where">COMSATS University Islamabad, Pakistan</span></p>
+        </li>
+      </ul>
+
+      <p class="sub">Certifications and badges</p>
+      <ul class="rows">
+        <li>
+          <span class="when">Anthropic</span>
+          <p class="what">Claude 101; AI Fluency: Framework and Foundations</p>
+        </li>
+        <li>
+          <span class="when">Lahore University of Management Sciences</span>
+          <p class="what">Data Science and Machine Learning using Python</p>
+        </li>
+        <li>
+          <span class="when">Google Developer Program</span>
+          <p class="what"><a href="https://developers.google.com/profile/badges/recognitions/learnings">Learning badge</a> and <a href="https://developers.google.com/profile/badges/profile/created-profile">Joined the Google Developer Program badge</a></p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="sec contact" id="contact" aria-labelledby="contact-h">
+  <div class="wrap">
+    <h2 id="contact-h">Contact</h2>
+    <div>
+      <p>I'm looking for AI/ML engineer roles and graduate in December 2026. LinkedIn is the quickest way to reach me.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="https://www.linkedin.com/in/muhammad-huzaifa-shafique">Message me on LinkedIn</a>
+        <a class="btn btn-line" href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub profile</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">&copy; 2026 Muhammad Huzaifa Shafique</div>
+</footer>
+</body>
+</html>
