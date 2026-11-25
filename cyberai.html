@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CyberAI: threat triage, ML pipeline and cited assistant | Muhammad Huzaifa Shafique</title>
-<meta name="description" content="A cyber-threat assistant: rule-based triage, a logistic regression and Isolation Forest pipeline with drift monitoring and a human-review queue, and an offline-first retrieval assistant. Interactive explainers, prompts and limits.">
+<title>CyberAI: ML pipeline, drift monitoring and a cited retrieval assistant | Muhammad Huzaifa Shafique</title>
+<meta name="description" content="An applied machine-learning project: a rule-based baseline that runs live in your browser, a scikit-learn pipeline (logistic regression, Isolation Forest, elastic net) with drift monitoring and a human-review queue, and a retrieval assistant that cites its evidence. Cyber-threat triage is the test domain. Limits stated.">
 <meta name="author" content="Muhammad Huzaifa Shafique">
 <meta name="robots" content="index,follow,max-snippet:-1">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#080b13">
 <link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CyberAI: threat triage, an ML pipeline and a cited assistant">
-<meta property="og:description" content="Logistic regression, Isolation Forest, drift monitoring, a human-review queue and an offline-first retrieval assistant, explained with interactive demos.">
+<meta property="og:title" content="CyberAI: an ML pipeline with human review and a cited retrieval assistant">
+<meta property="og:description" content="Run the rule-based baseline in your browser, then see the scikit-learn pipeline, drift monitor, review queue and retrieval assistant behind it. The browser version is tested against the Python code on 28,600 cases. Limits stated.">
 <meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236db0f7'/%3E%3Cstop offset='.6' stop-color='%239887ef'/%3E%3Cstop offset='1' stop-color='%2358d6bd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%23080b13'/%3E%3Crect x='1' y='1' width='30' height='30' rx='7' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ctext x='16' y='21.5' font-family='Arial,Helvetica,sans-serif' font-size='14' font-weight='700' text-anchor='middle' fill='url(%23g)'%3EHS%3C/text%3E%3C/svg%3E">
@@ -27,9 +27,39 @@ input[type=range]{width:100%;accent-color:var(--blue);margin:0}
 .meter .m{position:absolute;top:-7px;bottom:-7px;width:6px;margin-left:-3px;background:var(--ink);border-radius:3px}
 .meter .tl{position:absolute;top:-1.55rem;font:.74rem var(--sans);color:var(--ink2);transform:translateX(-50%);white-space:nowrap}
 .ends{display:flex;justify-content:space-between;font:.76rem var(--sans);color:var(--ink2)}
+.tri .lab{display:block;font:500 .86rem var(--sans);color:var(--ink2);margin:1rem 0 .4rem}
+.tri textarea{display:block;width:100%;min-height:3.4rem;resize:vertical;padding:.7rem .85rem;font:400 .86rem/1.5 var(--mono);color:var(--ink);background:rgba(5,8,15,.6);border:1px solid var(--rule);border-radius:12px}
+.tri textarea:focus{outline:none;border-color:rgba(109,176,247,.65);box-shadow:0 0 0 3px rgba(51,140,237,.18)}
+.ex{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+.ex>span{font:500 .84rem var(--sans);color:var(--ink2);margin-right:.2rem}
+.ex button{font:500 .82rem var(--sans);color:var(--ink2);background:var(--wash);border:1px solid var(--rule);border-radius:999px;padding:.32rem .8rem;cursor:pointer;transition:border-color .2s,color .2s,background .2s}
+.ex button:hover{color:var(--ink);border-color:rgba(109,176,247,.55)}
+.ex button[aria-pressed=true]{color:var(--ink);border-color:rgba(109,176,247,.6);background:rgba(51,140,237,.16)}
+.vd{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin:1.2rem 0 .6rem}
+.badge{display:inline-flex;align-items:center;gap:.5rem;padding:.38rem 1rem;border-radius:999px;font:600 1rem var(--head);border:1px solid}
+.badge.v-ok{color:#8fe6d3;background:rgba(0,168,136,.12);border-color:rgba(0,168,136,.5)}
+.badge.v-mid{color:#ffc29c;background:rgba(231,102,36,.14);border-color:rgba(231,102,36,.55)}
+.badge.v-bad{color:#ffb4b6;background:rgba(229,72,77,.15);border-color:rgba(229,72,77,.6)}
+.sco{font:500 .9rem var(--sans);color:var(--ink2)}
+.scale{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;max-width:24rem}
+.scale span{text-align:center;font:500 .8rem var(--mono);padding:.3rem 0;border-radius:6px;color:var(--mute);border:1px solid transparent}
+.scale .v-ok{background:rgba(0,168,136,.1)}.scale .v-mid{background:rgba(231,102,36,.1)}.scale .v-bad{background:rgba(229,72,77,.1)}
+.scale .on{color:var(--ink);font-weight:600}
+.scale .on.v-ok{background:rgba(0,168,136,.32);border-color:#00a888}
+.scale .on.v-mid{background:rgba(231,102,36,.32);border-color:#e76624}
+.scale .on.v-bad{background:rgba(229,72,77,.32);border-color:#e5484d}
+.scale .k{grid-row:2;background:none;border:0;padding:.15rem 0;font:.72rem var(--sans);color:var(--mute)}
+.scale .k1{grid-column:1}.scale .k2{grid-column:2/6}.scale .k3{grid-column:6/8}
+ul.why{list-style:none;margin:.9rem 0 0;padding:0;max-width:none}
+ul.why li{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.6rem;padding:.6rem 0;border-top:1px solid var(--rule);font:.92rem/1.5 var(--sans);color:var(--ink)}
+ul.why .pt{font:600 .85rem var(--mono);color:var(--link);text-align:right;padding-top:.08rem}
+ul.why .d{display:block;margin-top:.15rem;font-size:.84rem;color:var(--mute)}
+.tri dl.facts dd div{overflow-wrap:anywhere}
+.tri .nt{font:.88rem/1.55 var(--sans);color:var(--ink2);margin:.9rem 0 0;max-width:none;padding-left:.8rem;border-left:2px solid var(--s2)}
+@media (max-width:560px){.scale{max-width:none}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"CyberAI: threat triage, an ML pipeline and a cited assistant","url":"https://muhammad-huzaifa-shafique.github.io/cyberai.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Threat intelligence","Anomaly detection","Concept drift monitoring","Human-in-the-loop machine learning","Retrieval-augmented generation"],"keywords":"logistic regression, Isolation Forest, anomaly detection, drift monitoring, human-in-the-loop, TF-IDF, sentence embeddings, MiniLM, RAG, threat intelligence, SQLite, Python","isBasedOn":{"@type":"SoftwareSourceCode","name":"CyberAI","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/CyberAI"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"CyberAI: an ML pipeline with human review and a cited retrieval assistant","url":"https://muhammad-huzaifa-shafique.github.io/cyberai.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Machine learning pipelines","Anomaly detection","Concept drift monitoring","Human-in-the-loop machine learning","Retrieval-augmented generation","Software testing"],"keywords":"machine learning pipeline, scikit-learn, logistic regression, Isolation Forest, elastic net, anomaly detection, drift monitoring, human-in-the-loop, retrieval-augmented generation, TF-IDF, sentence embeddings, MiniLM, LLM, Ollama, prompt design, regression testing, SQLite, Python, JavaScript","isBasedOn":{"@type":"SoftwareSourceCode","name":"CyberAI","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/CyberAI"}}
 </script>
 </head>
 <body>
@@ -42,14 +72,15 @@ input[type=range]{width:100%;accent-color:var(--blue);margin:0}
 
 <section class="hero sm" aria-labelledby="h1">
 <p class="crumb"><a href="./#projects">Main projects</a> / CyberAI</p>
-<h1 id="h1" style="max-width:26ch">CyberAI: threat triage, an ML pipeline and a cited assistant</h1>
-<p class="lede">CyberAI is a cyber-threat assistant I built for a graduate AI course. It checks links, emails and PDFs, keeps a local cache of threat indicators, scores them with machine-learning models, and answers questions from the cache before it goes online.</p>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code (triage tool and architecture note)</a><a href="#explainers">Jump to the explainers</a><a href="method.html">How I build with AI assistants</a></p>
-<p class="rel"><b>Relevant to:</b> classification, logistic regression, anomaly detection (Isolation Forest), drift monitoring, human-in-the-loop review, retrieval-augmented generation, TF-IDF retrieval, sentence embeddings, API integration, SQLite, Python.</p>
+<h1 id="h1" style="max-width:26ch">CyberAI: an ML pipeline with human review and a cited assistant</h1>
+<p class="lede">An applied machine-learning project from a graduate AI course: a scikit-learn scoring pipeline with drift monitoring and a human-review queue, a retrieval assistant that cites its evidence, and a rule-based baseline you can run on this page. Cyber-threat triage is the test domain.</p>
+<p class="links"><a href="#try">Try the baseline live</a><a href="#explainers">Jump to the explainers</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code (triage tool and architecture note)</a><a href="method.html">How I build with AI assistants</a></p>
+<p class="rel"><b>Relevant to:</b> machine-learning pipelines, scikit-learn, logistic regression, anomaly detection (Isolation Forest), elastic-net regression, drift monitoring, human-in-the-loop review, retrieval-augmented generation (RAG), TF-IDF retrieval, sentence embeddings, LLM integration (Ollama, OpenAI), prompt design, regression testing, Python, JavaScript, SQLite.</p>
 </section>
 
-<section class="sec" aria-labelledby="h-what"><div class="row"><h2 id="h-what">What it is</h2><div class="body">
-<p>Three parts work together. A rule-based triage tool scores links, emails and PDFs from VirusTotal, DNS, WHOIS, blocklists, SPF, DMARC and DKIM checks, look-alike domains and phishing wording, and returns Clean, Suspicious or Malware with the reasons. An ML pipeline scores indicators in a local cache. A chat assistant answers questions from that cache and shows its evidence.</p>
+<section class="sec" aria-labelledby="h-what"><div class="row"><h2 id="h-what">What it does</h2><div class="body">
+<p>Three parts work together. A <b>rule-based baseline</b> scores links, emails and PDFs and returns Clean, Suspicious or Malware with the reasons. It adds points for VirusTotal results, blocklist hits, SPF, DMARC and DKIM results, look-alike domains and phishing wording, and it shows DNS records and registration data beside the verdict without scoring them. An <b>ML pipeline</b> scores indicators in a local cache. A <b>retrieval assistant</b> answers questions from that cache and shows its evidence.</p>
+<p>The rules matter to the ML side because they are the baseline a trained classifier would have to beat. The evaluation that would show whether it does has not been run yet (see Limits).</p>
 <p>Live threat feeds were hard to scrape reliably, so I seeded the cache with public cybersecurity datasets from Hugging Face as stand-ins. Together with real triage results, they make up the cache.</p>
 <div class="scroll"><table class="t">
 <caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">What is in the local cache of the saved project</caption>
@@ -62,7 +93,32 @@ input[type=range]{width:100%;accent-color:var(--blue);margin:0}
 </tbody></table></div>
 </div></div></section>
 
-<section class="sec" aria-labelledby="h-pipe"><div class="row"><h2 id="h-pipe">The pipeline</h2><div class="body">
+<section class="sec" id="try" aria-labelledby="h-try"><div class="row"><h2 id="h-try">Try the baseline live</h2><div class="body">
+<p>This box runs the offline part of the triage rules in your browser, so you can see what the baseline does before any model is involved. Paste a link, an email address, a full raw email or text copied from a PDF. Nothing is uploaded: the checks run in JavaScript on your device.</p>
+<div class="bench tri" id="tri">
+<header><h3>Triage a link, an email or PDF text</h3><div class="seg" id="tri-k" role="group" aria-label="What to check"></div></header>
+<div class="ex" id="tri-ex" role="group" aria-label="Examples"></div>
+<label class="lab" for="tri-in" id="tri-lab">Link to check</label>
+<textarea id="tri-in" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"></textarea>
+<details id="tri-trbox" hidden><summary>Trusted domains the look-alike check compares against</summary>
+<label class="lab" for="tri-tr">One domain per line. This is the tool's built-in list. Edit it to see how the check changes.</label>
+<textarea id="tri-tr" rows="5" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off"></textarea>
+<p style="margin:.5rem 0 0"><button class="btn" type="button" id="tri-rs" style="border:1px solid var(--rule)">Reset to the built-in list</button></p>
+</details>
+<div id="tri-out" aria-live="polite"></div>
+<p class="sub" id="tri-suf" style="margin:1rem 0 0;font-size:.85rem"></p>
+<noscript><p class="out">This box needs JavaScript. The testing section below shows what the rules do.</p></noscript>
+</div>
+<dl class="facts">
+<dt>What runs here</dt>
+<dd>Link parsing, the warning-sign rules for domain names, the look-alike and extra-subdomain check against the trusted list, the Unicode-letter check, the email wording and Reply-To rules, and the verdict thresholds. It is the logic of <code>CyberAI.py</code>, ported to JavaScript.</dd>
+<dt>What does not run here</dt>
+<dd>VirusTotal, DNS records, registration data (RDAP), DNS blocklists, SPF, DMARC and DKIM. They need the internet or a key. A Clean verdict here means only that the offline rules found nothing. It does not mean the link or the email is safe.</dd>
+</dl>
+<p>I tested this port against the Python code on 28,600 cases. <a href="#testing">How I tested it, and what the testing showed about the rules</a>.</p>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-pipe"><div class="row"><h2 id="h-pipe">The ML pipeline</h2><div class="body">
 <ol class="steps">
 <li><span><b>Ingest.</b> Connectors write indicators (URLs, domains, text) into a local SQLite cache.</span></li>
 <li><span><b>Features.</b> Numeric features from each record, plus a bag of words over its text limited to the 300 most frequent words.</span></li>
@@ -107,7 +163,7 @@ input[type=range]{width:100%;accent-color:var(--blue);margin:0}
 </div>
 </div></div></section>
 
-<section class="sec" aria-labelledby="h-asst"><div class="row"><h2 id="h-asst">The assistant</h2><div class="body">
+<section class="sec" aria-labelledby="h-asst"><div class="row"><h2 id="h-asst">The retrieval assistant</h2><div class="body">
 <p>The chat assistant is offline-first. If a message contains a URL, a file or an email, it runs the triage tool. Otherwise it searches the local cache with TF-IDF. Code that loads a MiniLM embedding index is in the file, but this version of the chat does not call it. It shows the answer, why it answered that way, and the evidence passages, and it appends each exchange to a chat log that the search ignores. Separately, it saves question-and-answer pairs back into the cache (the 25 pairs above: 18 triage write-ups and 7 whose saved answer is the word None), and later questions can find them. The code calls this self-training. Nothing is trained: the assistant's earlier answers become searchable evidence, so a wrong answer can come back as evidence too.</p>
 <p>When an LLM is configured (Ollama with llama3 by default, or an OpenAI model) it writes the answer text, at temperature 0.3, from the evidence passages. These are the two prompts, as the code builds them.</p>
 <pre>You are a cybersecurity assistant. Write a clear, factual, structured answer.
@@ -129,10 +185,39 @@ the triage result as JSON</pre>
 <p>Both prompts give the model the facts it should use (the evidence list, the triage result) and say what shape the answer takes. The first one also tells the model what to do when the evidence is weak.</p>
 </div></div></section>
 
+<section class="sec" id="testing" aria-labelledby="h-test"><div class="row"><h2 id="h-test">Testing the browser port</h2><div class="body">
+<p>The live box is a port, so it has to be tested against the original. A script imports the real <code>CyberAI.py</code> with its internet calls replaced by stubs, gives the same input to both versions and compares the verdict, the score and every reason. It also compares the three library behaviours the rules rely on: URL parsing (<code>urllib.parse</code>), string similarity (<code>difflib</code>) and splitting a domain from its public suffix (<code>tldextract</code>).</p>
+<div class="scroll"><table class="t" style="max-width:42rem">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">Port compared with the Python code, one run of the saved test scripts</caption>
+<thead><tr><th scope="col">Compared</th><th scope="col" class="n">Cases</th><th scope="col" class="n">Differences</th></tr></thead>
+<tbody>
+<tr><td>Links: verdict, score and reasons</td><td class="n">3,023</td><td class="n">0</td></tr>
+<tr><td>Emails and email addresses</td><td class="n">4,655</td><td class="n">0</td></tr>
+<tr><td>PDF text: links found</td><td class="n">504</td><td class="n">0</td></tr>
+<tr><td>String similarity (difflib ratio)</td><td class="n">7,900</td><td class="n">0</td></tr>
+<tr><td>URL parsing (host and netloc)</td><td class="n">6,000</td><td class="n">0</td></tr>
+<tr><td>Domain splitting (tldextract)</td><td class="n">6,518</td><td class="n">0</td></tr>
+<tr><td><b>Total</b></td><td class="n"><b>28,600</b></td><td class="n"><b>0</b></td></tr>
+</tbody></table></div>
+<p>The cases mix hand-written edge cases with seeded random ones: odd schemes, user info, bracketed IPv6 hosts, Unicode and punycode names, capital letters, Reply-To variants, very long strings, and emails built to reach 5 points, because the Malware threshold is rarely hit otherwise. To check that the test can fail, I broke the port in 15 places on purpose (thresholds, caps, operators, message text), one at a time. The test caught all 15.</p>
+<h3 style="margin-top:1.4rem">What testing showed about the Python rules</h3>
+<p>Porting the rules and testing them turned up four behaviours worth knowing. I have not changed the Python tool, and the port copies these behaviours so that the two versions agree.</p>
+<ul>
+<li>The look-alike check is case-sensitive for email addresses. <code>support@paypa1.com</code> is flagged as a look-alike of paypal.com. <code>support@PAYPA1.COM</code> is not, and gets no look-alike point.</li>
+<li>The Unicode-letter check does not see punycode. <code>p&#x430;ypal.com</code> with a Cyrillic "&#x430;" (U+0430) scores 2, but its ASCII spelling <code>xn--pypal-4ve.com</code> scores 0.</li>
+<li>The keyword rule matches pieces of a domain name, so an ordinary name such as freecodecamp.org (it contains "free") counts as a warning sign.</li>
+<li>In the full tool, each SPF and DMARC result adds one point, including "SPF found" and "DMARC found". An email with a sender domain therefore scores at least 2 there and can never be Clean. I read this in the code and in the project's own README, and I did not run live lookups for it.</li>
+</ul>
+<p>These are small, and a labeled evaluation set is the kind of thing that would surface them. They are one more reason I report no accuracy for the rules.</p>
+<p class="limit"><b>Limit.</b> I could not install the <code>tldextract</code> package where I ran the tests, so the reference run used a stand-in I wrote from its documented algorithm and the same Public Suffix List snapshot (28 December 2025). The domain-splitting comparison therefore shows that the port agrees with that stand-in. I checked the stand-in against 13 known examples. The test scripts use the real package when it is installed, but I could not run that path. The PDF and DNS libraries were also replaced by stubs, so PDF files are not read and the box takes pasted text. The reference run used Python 3.13.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Muhammad-Huzaifa-Shafique.github.io/tree/main/tests/cyberai-parity">Test scripts</a><a href="cyberai-triage.js">The JavaScript port</a></p>
+</div></div></section>
+
 <section class="sec" aria-labelledby="h-lim"><div class="row"><h2 id="h-lim">Limits</h2><div class="body">
 <ul>
 <li>I have not measured accuracy. The code has a hold-out evaluation command (a random 80/20 split), but the saved project has no model file and no evaluation output. The saved training manifest also could not support a meaningful test: its 25 malicious records are all file hashes, and its other 425 records are web and RSS text labeled unknown, which the training code counts as benign. A classifier could tell those two groups apart without learning anything about threats. So nothing on this page describes how well it classifies, and the numbers describe the design and the size of the cache.</li>
 <li>The triage point values are set by hand, not learned from data.</li>
+<li>The live box runs only the offline rules of the triage tool. It is not the ML pipeline, which needs its cache, models and training data, and it never calls VirusTotal, DNS or the other online checks.</li>
 <li>The review queue in the saved project is empty, so it has not been exercised on stored data.</li>
 <li>The optional "LLM reasoner" inside the pipeline is a placeholder: it redacts email addresses and key-like strings, then uses keyword rules. The assistant is the part that calls a real LLM.</li>
 <li>The public datasets stand in for live feeds, so the cache is not real-time threat intelligence.</li>
@@ -145,6 +230,7 @@ the triage result as JSON</pre>
 </div></main>
 <footer class="foot"><div class="wrap"><span>&copy; <span id="yr">2026</span> Muhammad Huzaifa Shafique</span><span><a href="llms.txt">Plain-text summary for AI tools (llms.txt)</a></span></div></footer>
 <script src="site.js"></script>
+<script src="cyberai-triage.js"></script>
 <script>
 (function () {
   var p = $('#p'), pm = $('#p-m'), pr = $('#p-r');
@@ -182,6 +268,136 @@ the triage result as JSON</pre>
       : 'Best match ' + v.toFixed(2) + ' is below 0.18, so the cache is too weak. The assistant tries a live lookup, adds what it finds to the cache, searches again, and answers only if the new best match reaches 0.18. Otherwise it says it does not have enough relevant material.';
   }
   g.addEventListener('input', upG); upG();
+})();
+
+(function () {
+  var T = window.CyberTriage;
+  if (!T) return;
+  var KINDS = [['url', 'Link'], ['email', 'Email'], ['pdf', 'PDF text']];
+  var LAB = { url: 'Link to check', email: 'Email address, or the full raw email', pdf: 'Text copied from a PDF' };
+  var ROWS = { url: 3, email: 7, pdf: 4 };
+  var EX = {
+    url: [
+      ['Hyphens and keywords', 'https://secure-login-verify-paypal-account.example.com/signin'],
+      ['A normal site with "free" in its name', 'https://www.freecodecamp.org/learn'],
+      ['Unicode letters in the name', 'https://p\u0430ypal.example/login'],
+      ['A trusted site', 'https://www.pittstate.edu/']
+    ],
+    email: [
+      ['Look-alike address', 'support@paypa1.com'],
+      ['Phishing-style message', 'From: PayPal Support <service@paypa1.com>\nReply-To: <collect@mail-box.example>\nSubject: Urgent: verify your account\n\nYour account is suspended. Click here to restore it: http://paypa1.com/verify'],
+      ['Same look-alike in capitals', 'support@PAYPA1.COM'],
+      ['Built to reach Malware', 'From: IT Support <helpdesk@\u00e9.apogle.com>\nReply-To: <collect@mail-box.example>\nSubject: Urgent: password reset\n\nYour account will be suspended. Click here: http://apogle.com/reset']
+    ],
+    pdf: [
+      ['Links in the text', 'Quarterly report: https://example.org/report (see also https://example.org/report and http://files.example.net/a.zip)']
+    ]
+  };
+  var kind = 'url';
+  var ta = $('#tri-in'), out = $('#tri-out'), ex = $('#tri-ex'), trBox = $('#tri-trbox'), trTa = $('#tri-tr'),
+      lab = $('#tri-lab'), suf = $('#tri-suf');
+
+  function trusted() {
+    return trTa.value.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+  function add(ul, pts, text, notes) {
+    var li = h('li', {}, ul);
+    h('span', { 'class': 'pt' }, li, pts ? '+' + pts : '');
+    var b = h('span', {}, li, text);
+    (notes || []).forEach(function (n) { h('span', { 'class': 'd' }, b, n); });
+  }
+  function fact(dl, k, v) { h('dt', {}, dl, k); return h('dd', {}, dl, v); }
+
+  function render() {
+    out.textContent = '';
+    if (!ta.value.trim()) { h('p', { 'class': 'out' }, out, 'Type or paste something above, or pick an example.'); return; }
+    var r;
+    try { r = T.run(kind, ta.value, kind === 'email' ? trusted() : undefined); }
+    catch (e) { r = { error: String((e && e.message) || e) }; }
+    if (r.error) {
+      h('p', { 'class': 'out' }, out, 'This text cannot be read as a link (' + r.error + '). Python\'s URL parser rejects the same input, so the original tool would stop here too.');
+      return;
+    }
+    var cls = { Clean: 'v-ok', Suspicious: 'v-mid', Malware: 'v-bad' }[r.verdict];
+    var icon = { Clean: '\u2713', Suspicious: '!', Malware: '\u2715' }[r.verdict];
+    var vd = h('div', { 'class': 'vd' }, out);
+    h('span', { 'class': 'badge ' + cls }, vd, icon + ' ' + r.verdict);
+    h('span', { 'class': 'sco' }, vd, 'Score: ' + r.score);
+    var sc = h('div', { 'class': 'scale', role: 'img', 'aria-label': 'Score ' + r.score + ' on a scale where 0 is Clean, 1 to 4 is Suspicious and 5 or more is Malware.' }, out);
+    for (var i = 0; i <= 6; i++) {
+      h('span', { 'class': (i === 0 ? 'v-ok' : i < 5 ? 'v-mid' : 'v-bad') + (i === Math.min(r.score, 6) ? ' on' : '') }, sc, i === 6 ? '6+' : String(i));
+    }
+    h('span', { 'class': 'k k1' }, sc, 'Clean');
+    h('span', { 'class': 'k k2' }, sc, 'Suspicious: 1 to 4');
+    h('span', { 'class': 'k k3' }, sc, 'Malware: 5+');
+
+    var why = h('ul', { 'class': 'why' }, out);
+    if (!r.reasons.length) add(why, 0, 'No rule fired, so the score is 0.');
+    r.reasons.forEach(function (x, i) {
+      var heur = i === 0 && r.heuristics && r.heuristics.length && /^Heuristics: /.test(x);
+      if (heur) {
+        var more = T.urlEvidence(r.domain || '');
+        if (r.heuristics.length > 2) more.push('Heuristics add at most 2 points, however many fire.');
+        add(why, Math.min(2, r.heuristics.length), x, more);
+      } else add(why, 1, x);
+    });
+
+    var dl = h('dl', { 'class': 'facts' }, out);
+    if (kind === 'url') fact(dl, 'Domain checked', r.domain || 'none found');
+    if (kind === 'email') {
+      fact(dl, 'Input read as', r.mode === 'address' ? 'a single email address' : 'a full message');
+      fact(dl, 'Sender found', r.sender || 'none (no From line, so the sender checks did not run)');
+    }
+    if (kind !== 'url') {
+      var dd = fact(dl, 'Links found in the text', r.urls.length ? '' : 'none');
+      r.urls.slice(0, 8).forEach(function (u) { h('div', {}, dd, u); });
+      if (r.urls.length > 8) h('div', {}, dd, 'and ' + (r.urls.length - 8) + ' more');
+    }
+
+    var notes = [];
+    if (r.verdict === 'Clean') notes.push('Clean here means only that the offline rules found nothing. It is not a safety check.');
+    if (kind === 'url') notes.push('The full tool also adds VirusTotal results (2 points for each engine that says malicious, 1 for each that says suspicious) and DNS blocklist hits (2 points each). None of that runs here.');
+    if (kind === 'email' && r.sender && r.sender.indexOf('@') !== -1) notes.push('The full tool also adds one point for each SPF and DMARC result, even "SPF found", so this email would score at least 2 there. It checks blocklists too. None of that runs here.');
+    if (kind === 'pdf') notes.push('PDF mode only lists links. The tool does not scan them, so a PDF never gets a score above 0.');
+    notes.forEach(function (n) { h('p', { 'class': 'nt' }, out, n); });
+  }
+
+  function mark(i) {
+    $$('button', ex).forEach(function (b, j) { b.setAttribute('aria-pressed', String(j === i)); });
+  }
+  function pick(i) {
+    ta.value = EX[kind][i][1];
+    mark(i);
+    render();
+  }
+  function setKind(k) {
+    kind = k;
+    lab.textContent = LAB[k];
+    ta.rows = ROWS[k];
+    trBox.hidden = k !== 'email';
+    ex.textContent = '';
+    h('span', {}, ex, 'Examples:');
+    EX[k].forEach(function (e, i) {
+      var b = h('button', { type: 'button', 'aria-pressed': 'false' }, ex, e[0]);
+      b.addEventListener('click', function () { pick(i); });
+    });
+    pick(0);
+  }
+
+  trTa.value = T.DEFAULT_TRUSTED.join('\n');
+  seg($('#tri-k'), KINDS.map(function (k) { return k[1]; }), 0, function (i) { setKind(KINDS[i][0]); });
+  ta.addEventListener('input', function () { mark(-1); render(); });
+  trTa.addEventListener('input', render);
+  $('#tri-rs').addEventListener('click', function () { trTa.value = T.DEFAULT_TRUSTED.join('\n'); render(); });
+  setKind('url');
+
+  getJSON('cyberai-suffixes.json', function (d) {
+    T.loadSuffixes(d);
+    suf.textContent = 'Domain endings such as co.uk come from the Public Suffix List (' + (/snapshot (\S+)/.exec(d.v) || [0, 'snapshot'])[1] + '), loaded from cyberai-suffixes.json.';
+    render();
+  }, function () {
+    suf.textContent = 'The Public Suffix List could not be loaded, so endings such as co.uk are treated as one label.';
+  });
 })();
 </script>
 </body>
