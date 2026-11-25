@@ -1,6 +1,6 @@
 # CyberAI parity tests
 
-The CyberAI page on this site has a live box that runs the offline rules of the triage tool in the browser. The browser version is `cyberai-triage.js` in the root of this repository. These scripts check that it gives the same answers as the real Python tool, [`CyberAI.py`](https://github.com/Muhammad-Huzaifa-Shafique/CyberAI).
+The CyberAI page on this site has a live box that runs the offline rules of the triage tool in the browser. The browser version is `cyberai-triage.js` in the root of this repository. These scripts check that it gives the same answers as the real Python tool, [`CyberAI.py`](https://github.com/Muhammad-Huzaifa-Shafique/CyberAI-Threat-Triage-ML-Pipeline).
 
 ## What is compared
 
@@ -35,7 +35,7 @@ You need Python 3.12 or newer (the port follows the way `urllib.parse` behaves f
 
 ```
 # 1. Put the real tool next to this repository, or point CYBERAI_PY at it
-git clone https://github.com/Muhammad-Huzaifa-Shafique/CyberAI.git ../CyberAI
+git clone https://github.com/Muhammad-Huzaifa-Shafique/CyberAI-Threat-Triage-ML-Pipeline.git ../CyberAI
 
 # 2. Build the cases (from this folder). If tldextract is not installed, also set PSL_FILE
 #    to a copy of public_suffix_list.dat and install idna.
