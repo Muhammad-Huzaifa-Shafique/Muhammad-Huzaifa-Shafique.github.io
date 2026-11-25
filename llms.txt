@@ -13,6 +13,10 @@
 - [Sales forecasting with a neural network](https://muhammad-huzaifa-shafique.github.io/forecasting.html): A scikit-learn MLPRegressor that forecasts monthly sales for ten items, tested against four baselines on 12 unseen months with MAE, RMSE, WAPE and bias. WAPE 78.7% against 89.6% for the best baseline (about 12% lower). Five model versions, one rejected. Limits: bias of -37% over the test year, one hold-out period, ten items. Code: https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network
 - [Gapminder dashboard](https://muhammad-huzaifa-shafique.github.io/dashboard.html): An animated Quarto, R and Plotly report on life expectancy and income in 142 countries, 1952 to 2007, with population-weighted continent averages and a log income scale. Code: https://github.com/Muhammad-Huzaifa-Shafique/Dashboard
 
+## Deep learning coursework
+
+- [Neural networks from a NumPy forward pass to Keras CNNs](https://muhammad-huzaifa-shafique.github.io/deep-learning.html): An interactive walkthrough of four graduate neural-network assignments. (1) A 3-4-4-1 network's forward pass in NumPy. (2) Backpropagation written by hand with a 500-epoch gradient-descent loop on 100 synthetic samples: training loss falls from 796.2 to 23.5, after a long flat start at the variance of the targets and a one-epoch spike at epoch 121. (3) Ten one-change Keras experiments on California housing prices, each kept only if validation MAPE improved: test MAPE 21.33% to 18.91%. (4) Ten convolutional-network variations on CIFAR-10: test accuracy 71.65% to 74.54%. Limits: course exercises on standard datasets; each Keras result is a single training run; assignment 4 has no validation set, so its best score is probably a little optimistic; the Keras numbers are copied from the submitted reports. Code: https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework
+
 ## Data engineering
 
 - [Oklahoma legislature vote extractor](https://muhammad-huzaifa-shafique.github.io/data-engineering.html): Python (asyncio, aiohttp, regular expressions, pandas) tool that collects House and Senate votes into three CSV files. Team project in a graduate course; my part was the House votes. Checks on the House output (30,475 votes, 1999 to 2025): seat counts add up to the size of the House, but member rows cover only 76% of counted seats, and the cause is not yet traced. Code: https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor
@@ -24,7 +28,8 @@
 
 ## Skills
 
-- Machine learning and LLMs: scikit-learn (neural networks, logistic regression, Isolation Forest), time-series feature engineering, model evaluation (MAE, RMSE, WAPE, bias, baselines, hold-out tests), anomaly detection, drift monitoring, human-in-the-loop review, retrieval-augmented generation, embeddings and vector search (Chroma, MiniLM, nomic-embed-text), TF-IDF retrieval, prompt engineering, citation checking, local LLMs (Ollama, Llama 3.1).
+- Machine learning and LLMs: scikit-learn (neural networks, logistic regression, Isolation Forest), time-series feature engineering, model evaluation (MAE, RMSE, WAPE, MAPE, bias, baselines, hold-out tests), anomaly detection, drift monitoring, human-in-the-loop review, retrieval-augmented generation, embeddings and vector search (Chroma, MiniLM, nomic-embed-text), TF-IDF retrieval, prompt engineering, citation checking, local LLMs (Ollama, Llama 3.1).
+- Deep learning (coursework): neural networks, forward propagation and backpropagation written in NumPy, gradient descent, regression and convolutional neural networks (CNN) in Keras and TensorFlow, early stopping, dropout, batch normalization, learning-rate schedules, data augmentation, hyperparameter experiments, CIFAR-10 image classification.
 - Python and data: Python, pandas, NumPy, SQL, SQLite, R, Quarto, Plotly, REST APIs, Flask, asyncio, unit testing, Git.
 - Security: penetration testing, vulnerability assessment, threat intelligence, Kali Linux, Nmap, Metasploit.
 

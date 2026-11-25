@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural networks from NumPy to Keras CNNs: interactive walkthrough | Muhammad Huzaifa Shafique</title>
+<meta name="description" content="Interactive walkthrough of four neural-network assignments: backpropagation written in NumPy, ten Keras experiments on California housing prices, and ten CNN variations on CIFAR-10, with the recorded numbers and the limits.">
+<meta name="author" content="Muhammad Huzaifa Shafique">
+<meta name="robots" content="index,follow,max-snippet:-1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#080b13">
+<link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/deep-learning.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Neural networks from NumPy to Keras CNNs">
+<meta property="og:description" content="Scrub through backpropagation training, step through ten Keras experiments and compare ten CNN variations, each with its limits.">
+<meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/deep-learning.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236db0f7'/%3E%3Cstop offset='.6' stop-color='%239887ef'/%3E%3Cstop offset='1' stop-color='%2358d6bd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='%23080b13'/%3E%3Crect x='1' y='1' width='30' height='30' rx='7' fill='none' stroke='url(%23g)' stroke-width='2'/%3E%3Ctext x='16' y='21.5' font-family='Arial,Helvetica,sans-serif' font-size='14' font-weight='700' text-anchor='middle' fill='url(%23g)'%3EHS%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="site.css">
+<style>
+.ctl{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;margin:1rem 0 0}
+.ctl input[type=range]{flex:1 1 16rem;min-width:10rem;accent-color:var(--blue)}
+.ctl .btn{padding:.38rem .8rem}
+.btn:disabled{opacity:.4;cursor:default}
+.seg:empty{display:none}
+.chart{width:100%}
+.chart svg{display:block;max-width:100%;height:auto;overflow:visible}
+.out .b{font-weight:600;color:var(--ink)}
+.out div+div{margin-top:.25rem}
+.verdict{font:500 .95rem/1.5 var(--sans);color:var(--ink);margin:.9rem 0 .2rem;max-width:none}
+.exps{list-style:none;margin:.4rem 0 0;padding:0;max-width:none}
+.exps li{padding:1.1rem 0;border-top:1px solid var(--rule)}
+.exps h4{font:600 1.02rem/1.3 var(--head);letter-spacing:-.01em}
+.exps p{margin:.45rem 0 0;max-width:74ch;color:var(--ink2);font-size:.95rem}
+.exps p b{font:600 .85rem var(--sans);color:var(--ink)}
+.exps .nums{font:400 .78rem/1.6 var(--mono);color:var(--mute)}
+.bench.on .exps li{border-top:0;padding:.2rem 0 0}
+.tag{display:inline-block;margin-left:.5rem;padding:.1rem .6rem;border-radius:999px;font:500 .72rem/1.5 var(--mono);vertical-align:.1em;border:1px solid var(--rule);color:var(--ink2);background:var(--wash)}
+.tag.keep{color:#9ccbfa;border-color:rgba(51,140,237,.55);background:rgba(51,140,237,.13)}
+.stepnav{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between;margin-top:1rem}
+.abs{display:grid;gap:2px}
+.ab{position:relative;display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 7.6rem;gap:0 .7rem;align-items:center;padding:.38rem .6rem;border-radius:10px;cursor:pointer;font:.85rem/1.3 var(--sans);color:var(--ink2);transition:background .2s}
+.ab:hover{background:var(--wash)}
+.ab[aria-pressed=true]{background:rgba(51,140,237,.13);box-shadow:inset 0 0 0 1px rgba(109,176,247,.45);color:var(--ink)}
+.ab .b{position:relative;display:block;height:14px}
+.ab .b i{display:block;height:100%;background:var(--blue);border-radius:0 4px 4px 0;min-width:2px}
+.ab.base .b i{background:var(--mute)}
+.ab .b::after{content:"";position:absolute;top:-8px;bottom:-8px;left:var(--ref);border-left:1px dashed var(--ink2)}
+.ab .v{text-align:right;font-variant-numeric:tabular-nums}
+.ab small{margin-left:.4rem;font-size:.75rem;color:var(--mute)}
+.note{font:.82rem/1.5 var(--sans);color:var(--mute);margin:.7rem 0 0;max-width:70ch}
+@media (max-width:640px){.ab{grid-template-columns:minmax(0,7.2rem) minmax(0,1fr) 5.9rem;padding:.38rem .35rem}.stepnav{display:grid;grid-template-columns:1fr 1fr}.stepnav .seg{grid-column:1/-1;order:3;display:flex}.stepnav .seg button{flex:1 1 2.2rem;padding:.4rem .2rem;text-align:center}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Neural networks from NumPy to Keras CNNs","url":"https://muhammad-huzaifa-shafique.github.io/deep-learning.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Neural networks","Backpropagation","Gradient descent","Regression","Convolutional neural networks","Hyperparameter experiments"],"keywords":"neural networks, backpropagation, gradient descent, NumPy, Keras, TensorFlow, California housing, MAPE, early stopping, dropout, batch normalization, CNN, CIFAR-10, data augmentation, overfitting","isBasedOn":{"@type":"SoftwareSourceCode","name":"Neural-Networks-Coursework","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+<a class="mark" href="./">Muhammad Huzaifa Shafique</a>
+<nav aria-label="Main"><a href="./#projects">Projects</a><a href="deep-learning.html" aria-current="page">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+</div></header>
+<main id="main"><div class="wrap">
+
+<section class="hero sm" aria-labelledby="h1">
+<p class="crumb"><a href="./#deeplearning">Deep-learning coursework</a> / Neural networks</p>
+<h1 id="h1" style="max-width:24ch">Neural networks, from a NumPy forward pass to Keras CNNs</h1>
+<p class="lede">Four graduate assignments that build one idea up. I wrote the forward and backward pass by hand in NumPy, then ran ten one-change experiments on California housing prices and ten convolutional-network variations on CIFAR-10. Every chart on this page is drawn from the recorded numbers, and each section says what they do not show.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework">Source code and notes</a><a href="#backprop">Backpropagation</a><a href="#housing">Housing experiments</a><a href="#cifar">CNN variations</a></p>
+<p class="rel"><b>Relevant to:</b> neural networks, backpropagation, gradient descent, regression, mean absolute percentage error (MAPE), early stopping, dropout, batch normalization, convolutional neural networks (CNN), image classification, data augmentation, overfitting, hyperparameter experiments, NumPy, Keras, TensorFlow.</p>
+</section>
+
+<section class="sec" id="backprop" aria-labelledby="h-bp"><div class="row"><h2 id="h-bp">Assignments 1 and 2: a network built by hand</h2><div class="body">
+<p>Assignment 1 is a forward pass in NumPy: a dense layer, a sigmoid and a mean-squared-error loss, chained into a 3-4-4-1 network (three inputs, two hidden layers of four sigmoid neurons, one output). Assignment 2 adds a backward pass for each piece and a 500-epoch gradient-descent loop with a learning rate of 0.05. The network has 41 trainable parameters and trains on 100 synthetic samples.</p>
+<div class="bench" id="a2-bench" hidden>
+<header><h3>Training loss, epoch by epoch</h3><div class="seg" id="e-seg" role="group" aria-label="Vertical scale"></div></header>
+<div class="chart" id="c-loss"></div>
+<div class="lg"><span class="b"><i></i>Loss so far</span><span><i></i>Predicting the mean (reference)</span></div>
+<div class="ctl"><button class="btn" id="e-play" type="button">Play</button><input id="e-rng" type="range" min="1" max="500" step="1" value="121" aria-label="Epoch"><span id="e-jumps" class="ctl" style="margin:0"></span></div>
+<div class="out" id="e-out" aria-live="polite"></div>
+<p class="note">Drag across the chart, use the slider or press Play. The dashed line is the loss of a network that always predicts the mean of the targets, which is their variance.</p>
+</div>
+<ul class="pts">
+<li><b>A long flat start.</b> For roughly the first 75 epochs the loss stays at about 795.5, the variance of the targets, so the network does no better than predicting their mean. It then breaks out of the plateau and drops quickly (below 300 by epoch 102).</li>
+<li><b>One spike.</b> At epoch 121 the loss jumps to 753 from 244 at epoch 120 (it was 206 at epoch 119), and is back to 232 by epoch 123, below that 244. That pattern is consistent with a gradient step that overshot; the loss recovers and keeps falling.</li>
+<li><b>Still improving.</b> The loss ends at 23.5 and was still falling slowly at epoch 500.</li>
+</ul>
+<details><summary>Table view: loss at selected epochs</summary>
+<div class="scroll"><table class="t"><thead><tr><th class="n">Epoch</th><th class="n">Average MSE loss</th></tr></thead><tbody><tr><td class="n">1</td><td class="n">796.2023</td></tr><tr><td class="n">50</td><td class="n">795.4632</td></tr><tr><td class="n">100</td><td class="n">311.3017</td></tr><tr><td class="n">150</td><td class="n">143.7912</td></tr><tr><td class="n">200</td><td class="n">101.0182</td></tr><tr><td class="n">250</td><td class="n">56.1638</td></tr><tr><td class="n">300</td><td class="n">39.8508</td></tr><tr><td class="n">350</td><td class="n">33.6587</td></tr><tr><td class="n">400</td><td class="n">30.1493</td></tr><tr><td class="n">450</td><td class="n">25.9849</td></tr><tr><td class="n">500</td><td class="n">23.5246</td></tr></tbody></table></div>
+<p class="note">Around the spike:</p>
+<div class="scroll"><table class="t"><thead><tr><th class="n">Epoch</th><th class="n">Average MSE loss</th></tr></thead><tbody><tr><td class="n">119</td><td class="n">206.0233</td></tr><tr><td class="n">120</td><td class="n">244.1262</td></tr><tr><td class="n">121</td><td class="n">753.1380</td></tr><tr><td class="n">122</td><td class="n">374.8211</td></tr><tr><td class="n">123</td><td class="n">232.0951</td></tr></tbody></table></div>
+</details>
+<p class="limit"><b>Limit.</b> This is the training loss on all 100 samples. There is no validation or test split, so it shows that the network learned to fit these 100 points, not that it generalizes. One seed and one learning rate (0.05); other rates, and scaling the targets before training, were not explored.</p>
+</div></div></section>
+
+<section class="sec" id="housing" aria-labelledby="h-hs"><div class="row"><h2 id="h-hs">Assignment 3: ten Keras experiments on housing prices</h2><div class="body">
+<p>A dense network predicts California house prices from eight census features. The score is mean absolute percentage error (MAPE): how far off each prediction is, in percent, averaged over the houses. Lower is better. Each experiment changes one thing in the best configuration so far and is kept only if validation MAPE improves. The test set only reports each model's final score.</p>
+<div class="bench" id="a3-bench">
+<div class="viz" hidden>
+<header><h3>Step through the ten experiments</h3><div class="seg" id="a3-seg" role="group" aria-label="Metric to plot"></div></header>
+<div class="chart" id="c-a3"></div>
+<div class="lg"><span class="b"><i></i>Kept</span><span><i></i>Reverted</span></div>
+<p class="note" id="a3-note"></p>
+<div class="stepnav"><button class="btn" id="a3-prev" type="button">Previous</button><div class="seg" id="a3-num" role="group" aria-label="Experiment number"></div><button class="btn" id="a3-next" type="button">Next</button></div>
+<p class="verdict" id="a3-verdict" aria-live="polite"></p>
+</div>
+<ol class="exps" id="a3-list">
+<li data-id="1" data-name="Base model" data-val="21.22" data-test="21.33" data-mae="38873" data-kept="1">
+<h4>1. Base model <span class="tag keep">Baseline</span></h4>
+<p><b>Starting point.</b> two hidden layers (64, 32), ReLU, Adam 0.001, 50 epochs, price divided by 100,000.</p>
+<p><b>What happened.</b> Test MAPE 21.33%, test MAE $38,873, R2 0.752. 2,689 parameters.</p>
+<p class="nums">Hidden layers 64-32, MSE loss, batch size 32, 50 epochs run. Validation MAPE 21.22%, test MAPE 21.33%, test MAE $38,873.</p>
+</li>
+<li data-id="2" data-name="Wider and deeper network" data-val="19.16" data-test="19.25" data-mae="38439" data-kept="1">
+<h4>2. Wider and deeper network <span class="tag keep">Kept</span></h4>
+<p><b>Changed.</b> Added a third hidden layer and doubled the first: 128-64-32.</p>
+<p><b>Why I expected it to help.</b> House prices depend on non-linear interactions such as latitude with longitude (coast against inland), and more capacity can learn them.</p>
+<p><b>What happened.</b> Validation MAPE fell from 21.22% to 19.16%. Kept.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 50 epochs run. Validation MAPE 19.16%, test MAPE 19.25%, test MAE $38,439.</p>
+</li>
+<li data-id="3" data-name="Mean absolute error loss" data-val="19.80" data-test="19.48" data-mae="41142" data-kept="0">
+<h4>3. Mean absolute error loss <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Loss function: mean squared error to mean absolute error.</p>
+<p><b>Why I expected it to help.</b> MSE squares errors, so a few very expensive homes (prices are capped at $500,001) dominate training. MAE is closer to how MAPE scores a model.</p>
+<p><b>What happened.</b> Both metrics got worse (test MAE $41,142). MAE gives every error a same-sized gradient, so within 50 epochs it had not caught up. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MAE loss, batch size 32, 50 epochs run. Validation MAPE 19.80%, test MAPE 19.48%, test MAE $41,142.</p>
+</li>
+<li data-id="4" data-name="Log-transformed target" data-val="22.28" data-test="22.00" data-mae="39821" data-kept="0">
+<h4>4. Log-transformed target <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Trained on ln(price) instead of price / 100,000, then converted back with exp() before scoring.</p>
+<p><b>Why I expected it to help.</b> MAPE is a relative error. On a log scale a 10% miss is the same size for a $60,000 home and a $450,000 one.</p>
+<p><b>What happened.</b> The biggest surprise: MAPE got worse (22.00%). Small log-scale errors are magnified by exp(), and it was tested before early stopping was added, so it may not have converged. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 50 epochs run. Validation MAPE 22.28%, test MAPE 22.00%, test MAE $39,821.</p>
+</li>
+<li data-id="5" data-name="More epochs with early stopping" data-val="18.94" data-test="18.91" data-mae="34949" data-kept="1">
+<h4>5. More epochs with early stopping <span class="tag keep">Kept</span></h4>
+<p><b>Changed.</b> Up to 200 epochs with early stopping (watch val_loss, patience 15, restore the best weights).</p>
+<p><b>Why I expected it to help.</b> 50 epochs may stop before convergence. Early stopping trains longer, then stops and keeps the best weights, which guards against overfitting.</p>
+<p><b>What happened.</b> Validation MAPE 18.94%, the lowest of all ten. It stopped at epoch 133. Test MAE $34,949, R2 0.784. 11,521 parameters. Kept.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 133 epochs run. Validation MAPE 18.94%, test MAPE 18.91%, test MAE $34,949.</p>
+</li>
+<li data-id="6" data-name="Learning-rate reduction on plateau" data-val="19.41" data-test="19.57" data-mae="34670" data-kept="0">
+<h4>6. Learning-rate reduction on plateau <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Added ReduceLROnPlateau: halve the learning rate after 5 epochs without improvement (minimum 1e-6).</p>
+<p><b>Why I expected it to help.</b> A fixed learning rate can bounce around the minimum late in training. Smaller steps let the optimizer settle.</p>
+<p><b>What happened.</b> Lowest dollar error of all (test MAE $34,670) but MAPE was worse (19.57%): the extra training mainly cut errors on expensive homes while percentage errors on cheaper homes grew. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 200 epochs run. Validation MAPE 19.41%, test MAPE 19.57%, test MAE $34,670.</p>
+</li>
+<li data-id="7" data-name="Larger batch size" data-val="19.64" data-test="20.04" data-mae="36498" data-kept="0">
+<h4>7. Larger batch size <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Batch size 32 to 64.</p>
+<p><b>Why I expected it to help.</b> Smoother gradients and faster epochs, unless the noise of small batches was helping the model generalize.</p>
+<p><b>What happened.</b> Worse (test MAPE 20.04%). Half as many updates per epoch and less gradient noise; the noise at batch size 32 may have helped. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 64, 95 epochs run. Validation MAPE 19.64%, test MAPE 20.04%, test MAE $36,498.</p>
+</li>
+<li data-id="8" data-name="Dropout regularization" data-val="19.73" data-test="20.04" data-mae="35887" data-kept="0">
+<h4>8. Dropout regularization <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Dropout (rate 0.1) after each hidden layer.</p>
+<p><b>Why I expected it to help.</b> Switching off 10% of neurons at random usually reduces overfitting, which matters more in a bigger network.</p>
+<p><b>What happened.</b> Worse (20.04% against 18.91%). Dropout is meant to reduce overfitting, and the validation and test MAPE of this model were already close (18.94% and 18.91%). Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 102 epochs run. Validation MAPE 19.73%, test MAPE 20.04%, test MAE $35,887.</p>
+</li>
+<li data-id="9" data-name="Batch normalization" data-val="20.27" data-test="20.39" data-mae="37167" data-kept="0">
+<h4>9. Batch normalization <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> BatchNormalization between each dense layer and its activation.</p>
+<p><b>Why I expected it to help.</b> Stable layer inputs often speed up convergence and make deeper networks easier to train.</p>
+<p><b>What happened.</b> Worse (20.39%). Validation loss became noisier from epoch to epoch and the 15-epoch patience ran out at epoch 42, before the model reached its best. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 42 epochs run. Validation MAPE 20.27%, test MAPE 20.39%, test MAE $37,167.</p>
+</li>
+<li data-id="10" data-name="Swish activation" data-val="19.53" data-test="19.61" data-mae="35549" data-kept="0">
+<h4>10. Swish activation <span class="tag rev">Reverted</span></h4>
+<p><b>Changed.</b> Hidden-layer activation: ReLU to Swish, x * sigmoid(x).</p>
+<p><b>Why I expected it to help.</b> ReLU outputs exactly zero for negative inputs, so some neurons can stop learning. Swish is smooth and passes small negative values.</p>
+<p><b>What happened.</b> Close (19.61%) but not better. With inputs scaled to [0, 1] and a network this small, dying ReLU was not a real problem. Reverted.</p>
+<p class="nums">Hidden layers 128-64-32, MSE loss, batch size 32, 196 epochs run. Validation MAPE 19.53%, test MAPE 19.61%, test MAE $35,549.</p>
+</li>
+</ol>
+</div>
+<p>Test MAPE fell from 21.33% (base model) to 18.91% (Model 5), with test MAE $34,949 and R2 0.784. Only two of the nine changes were kept: more capacity (Model 2) and longer training with early stopping (Model 5).</p>
+<details><summary>Table view: all ten experiments</summary>
+<div class="scroll"><table class="t"><thead><tr><th class="n">#</th><th>Model</th><th>Hidden layers</th><th>Loss</th><th class="n">Batch</th><th class="n">Epochs run</th><th class="n">Val MAPE</th><th class="n">Test MAPE</th><th class="n">Test MAE</th><th>Kept</th></tr></thead><tbody><tr><td class="n">1</td><td>Base model</td><td>64-32</td><td>MSE</td><td class="n">32</td><td class="n">50</td><td class="n">21.22%</td><td class="n">21.33%</td><td class="n">$38,873</td><td>yes</td></tr><tr><td class="n">2</td><td>Wider and deeper network</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">50</td><td class="n">19.16%</td><td class="n">19.25%</td><td class="n">$38,439</td><td>yes</td></tr><tr><td class="n">3</td><td>Mean absolute error loss</td><td>128-64-32</td><td>MAE</td><td class="n">32</td><td class="n">50</td><td class="n">19.80%</td><td class="n">19.48%</td><td class="n">$41,142</td><td>no</td></tr><tr><td class="n">4</td><td>Log-transformed target</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">50</td><td class="n">22.28%</td><td class="n">22.00%</td><td class="n">$39,821</td><td>no</td></tr><tr><td class="n">5</td><td>More epochs with early stopping</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">133</td><td class="n">18.94%</td><td class="n">18.91%</td><td class="n">$34,949</td><td>yes</td></tr><tr><td class="n">6</td><td>Learning-rate reduction on plateau</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">200</td><td class="n">19.41%</td><td class="n">19.57%</td><td class="n">$34,670</td><td>no</td></tr><tr><td class="n">7</td><td>Larger batch size</td><td>128-64-32</td><td>MSE</td><td class="n">64</td><td class="n">95</td><td class="n">19.64%</td><td class="n">20.04%</td><td class="n">$36,498</td><td>no</td></tr><tr><td class="n">8</td><td>Dropout regularization</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">102</td><td class="n">19.73%</td><td class="n">20.04%</td><td class="n">$35,887</td><td>no</td></tr><tr><td class="n">9</td><td>Batch normalization</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">42</td><td class="n">20.27%</td><td class="n">20.39%</td><td class="n">$37,167</td><td>no</td></tr><tr><td class="n">10</td><td>Swish activation</td><td>128-64-32</td><td>MSE</td><td class="n">32</td><td class="n">196</td><td class="n">19.53%</td><td class="n">19.61%</td><td class="n">$35,549</td><td>no</td></tr></tbody></table></div>
+</details>
+<p class="limit"><b>Limit.</b> One run per model with seed 42, so gaps of a few tenths of a point, such as Models 7 and 8 both scoring 20.04%, do not rank models. Changes were tried once, in a fixed order, and Models 3 and 4 were judged before early stopping was added, so they were never retried with it. Dollar error and MAPE can disagree: Model 6 has the lowest test MAE and a worse MAPE than Model 5.</p>
+</div></div></section>
+
+<section class="sec" id="cifar" aria-labelledby="h-cf"><div class="row"><h2 id="h-cf">Assignment 4: ten CNN variations on CIFAR-10</h2><div class="body">
+<p>A small convolutional network classifies 32 by 32 color images into ten classes (CIFAR-10: 50,000 training and 10,000 test images). The base model has two convolutional layers (32 and 64 filters), 2 by 2 max pooling and a 64-neuron dense layer. Each variation changes one thing: depth, width, dropout, batch normalization, optimizer, learning rate, augmentation, epochs or activation.</p>
+<div class="bench" id="a4-bench">
+<div class="viz" hidden>
+<header><h3>Test accuracy by variation</h3><div class="seg" id="a4-seg" role="group" aria-label="View"></div></header>
+<div class="chart" id="c-a4"></div>
+<div class="lg" id="a4-lg"></div>
+<p class="note" id="a4-note"></p>
+</div>
+<ol class="exps" id="a4-list">
+<li data-id="1" data-name="Base model" data-test="71.65" data-train="">
+<h4>1. Base model <span class="tag keep">Base model</span></h4>
+<p><b>Changed.</b> Baseline: two conv layers (32, 64 filters) with max pooling, one 64-neuron dense layer, ReLU, no regularization.</p>
+<p><b>Reading.</b> The reference point for every other row.</p>
+<p class="nums">Conv 32-64, Dense 64. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 71.65%, training accuracy not reported.</p>
+</li>
+<li data-id="2" data-name="Deeper network" data-test="74.54" data-train="">
+<h4>2. Deeper network <span class="tag keep">+2.89 points</span></h4>
+<p><b>Changed.</b> A third conv layer (128 filters) to see whether more depth builds richer features (edges, then textures, then object parts).</p>
+<p><b>Reading.</b> Best of the ten, +2.89 points. The only change that clearly helped.</p>
+<p class="nums">Conv 32-64-128, Dense 64. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 74.54%, training accuracy not reported.</p>
+</li>
+<li data-id="3" data-name="Dropout regularization" data-test="68.03" data-train="60.12">
+<h4>3. Dropout regularization <span class="tag rev">-3.62 points</span></h4>
+<p><b>Changed.</b> Dropout(0.5) after the dense layer so no single neuron can be relied on.</p>
+<p><b>Reading.</b> 3.62 points below the base model. Training accuracy (60.12%) sits below test accuracy because dropout is only active while training.</p>
+<p class="nums">Conv 32-64, Dense 64 + Dropout 0.5. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 68.03%, training accuracy 60.12%.</p>
+</li>
+<li data-id="4" data-name="Batch normalization" data-test="68.23" data-train="88.60">
+<h4>4. Batch normalization <span class="tag rev">-3.42 points</span></h4>
+<p><b>Changed.</b> BatchNormalization after each conv layer to stabilize and speed up training.</p>
+<p><b>Reading.</b> A 20-point gap between training (88.6%) and test (68.23%): the overfitting pattern.</p>
+<p class="nums">Conv 32-64 (+BN), Dense 64. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 68.23%, training accuracy 88.60%.</p>
+</li>
+<li data-id="5" data-name="SGD with momentum" data-test="68.32" data-train="">
+<h4>5. SGD with momentum <span class="tag rev">-3.33 points</span></h4>
+<p><b>Changed.</b> SGD with momentum 0.9 and learning rate 0.01 in place of Adam.</p>
+<p><b>Reading.</b> 3.33 points below Adam at the same 10 epochs.</p>
+<p class="nums">Conv 32-64, Dense 64. SGD, momentum 0.9, learning rate 0.01, batch size 64, 10 epochs. Test accuracy 68.32%, training accuracy not reported.</p>
+</li>
+<li data-id="6" data-name="Lower learning rate" data-test="59.96" data-train="">
+<h4>6. Lower learning rate <span class="tag rev">-11.69 points</span></h4>
+<p><b>Changed.</b> Adam with the learning rate cut from 0.001 to 0.0001.</p>
+<p><b>Reading.</b> The weakest result, 11.69 points below the base model. The report reads it as a rate too cautious to converge in 10 epochs.</p>
+<p class="nums">Conv 32-64, Dense 64. Adam, learning rate 0.0001, batch size 64, 10 epochs. Test accuracy 59.96%, training accuracy not reported.</p>
+</li>
+<li data-id="7" data-name="Wider network" data-test="71.75" data-train="">
+<h4>7. Wider network <span class="tag keep">+0.10 points</span></h4>
+<p><b>Changed.</b> Every conv filter count doubled (64, 128) to add capacity through width instead of depth.</p>
+<p><b>Reading.</b> +0.10 points. With one run per variation, a gap this small should not be read as a real difference.</p>
+<p class="nums">Conv 64-128, Dense 64. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 71.75%, training accuracy not reported.</p>
+</li>
+<li data-id="8" data-name="Data augmentation" data-test="69.50" data-train="66.61">
+<h4>8. Data augmentation <span class="tag rev">-2.15 points</span></h4>
+<p><b>Changed.</b> Random flips, rotations and shifts of the training images each epoch.</p>
+<p><b>Reading.</b> Training accuracy (66.61%) sits below test accuracy (69.50%) because training images are distorted while test images are clean.</p>
+<p class="nums">Conv 32-64, Dense 64. Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 69.50%, training accuracy 66.61%.</p>
+</li>
+<li data-id="9" data-name="More epochs" data-test="69.87" data-train="92.87">
+<h4>9. More epochs <span class="tag rev">-1.78 points</span></h4>
+<p><b>Changed.</b> The base architecture trained for 20 epochs instead of 10.</p>
+<p><b>Reading.</b> Highest reported training accuracy (92.87%) with below-average test accuracy: overfitting.</p>
+<p class="nums">Conv 32-64, Dense 64. Adam, learning rate 0.001, batch size 64, 20 epochs. Test accuracy 69.87%, training accuracy 92.87%.</p>
+</li>
+<li data-id="10" data-name="LeakyReLU activation" data-test="71.23" data-train="">
+<h4>10. LeakyReLU activation <span class="tag rev">-0.42 points</span></h4>
+<p><b>Changed.</b> LeakyReLU in place of ReLU in every conv and dense layer, to avoid neurons stuck at zero.</p>
+<p><b>Reading.</b> -0.42 points. With one run per variation, a gap this small should not be read as a real difference.</p>
+<p class="nums">Conv 32-64, Dense 64 (LeakyReLU). Adam, learning rate 0.001, batch size 64, 10 epochs. Test accuracy 71.23%, training accuracy not reported.</p>
+</li>
+</ol>
+</div>
+<ul class="pts">
+<li><b>Depth helped and little else did.</b> The third convolutional layer added 2.89 points. Doubling the filters (+0.10) and LeakyReLU (-0.42) are too small to separate from run-to-run noise.</li>
+<li><b>The training-test gap shows overfitting.</b> More epochs reached 92.87% training accuracy against 69.87% on test, and batch normalization 88.6% against 68.23%.</li>
+<li><b>A learning rate of 0.0001 was the weakest result (59.96%).</b> Steps that small did not converge in 10 epochs.</li>
+</ul>
+<details><summary>Table view: all ten variations</summary>
+<div class="scroll"><table class="t"><thead><tr><th class="n">#</th><th>Variation</th><th>Architecture</th><th>Optimizer (learning rate)</th><th class="n">Epochs</th><th class="n">Test accuracy</th><th class="n">Train accuracy</th></tr></thead><tbody><tr><td class="n">1</td><td>Base model</td><td>Conv 32-64, Dense 64</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">71.65%</td><td class="n">not reported</td></tr><tr><td class="n">2</td><td>Deeper network</td><td>Conv 32-64-128, Dense 64</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">74.54%</td><td class="n">not reported</td></tr><tr><td class="n">3</td><td>Dropout regularization</td><td>Conv 32-64, Dense 64 + Dropout 0.5</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">68.03%</td><td class="n">60.12%</td></tr><tr><td class="n">4</td><td>Batch normalization</td><td>Conv 32-64 (+BN), Dense 64</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">68.23%</td><td class="n">88.60%</td></tr><tr><td class="n">5</td><td>SGD with momentum</td><td>Conv 32-64, Dense 64</td><td>SGD, momentum 0.9 (0.01)</td><td class="n">10</td><td class="n">68.32%</td><td class="n">not reported</td></tr><tr><td class="n">6</td><td>Lower learning rate</td><td>Conv 32-64, Dense 64</td><td>Adam (0.0001)</td><td class="n">10</td><td class="n">59.96%</td><td class="n">not reported</td></tr><tr><td class="n">7</td><td>Wider network</td><td>Conv 64-128, Dense 64</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">71.75%</td><td class="n">not reported</td></tr><tr><td class="n">8</td><td>Data augmentation</td><td>Conv 32-64, Dense 64</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">69.50%</td><td class="n">66.61%</td></tr><tr><td class="n">9</td><td>More epochs</td><td>Conv 32-64, Dense 64</td><td>Adam (0.001)</td><td class="n">20</td><td class="n">69.87%</td><td class="n">92.87%</td></tr><tr><td class="n">10</td><td>LeakyReLU activation</td><td>Conv 32-64, Dense 64 (LeakyReLU)</td><td>Adam (0.001)</td><td class="n">10</td><td class="n">71.23%</td><td class="n">not reported</td></tr></tbody></table></div>
+</details>
+<p class="limit"><b>Limit.</b> One run per variation and no validation set, so the best of ten test scores is probably a little optimistic. Ten epochs favors setups that learn quickly: dropout, augmentation and a lower learning rate usually need longer runs, so these results describe a 10-epoch budget only.</p>
+</div></div></section>
+
+<section class="sec" id="limits" aria-labelledby="h-lim"><div class="row"><h2 id="h-lim">What these numbers do and do not show</h2><div class="body">
+<ul class="pts">
+<li><b>Single runs.</b> Each Keras result is one training run. Differences of about a point or less, such as 71.65% against 71.75% in assignment 4, are not enough to rank two variations.</li>
+<li><b>Selection.</b> Assignment 3 keeps changes by validation MAPE, as intended, but the "best model" line at the end of its script picks the lowest test MAPE. Both rules choose Model 5 here. Assignment 4 has no validation set, so 74.54% is probably a little optimistic.</li>
+<li><b>Source of the numbers.</b> The Keras numbers are copied from the reports I submitted with those assignments, not re-run for this page. The script that ran the ten CNN variations is not in the repository; the best model's script is.</li>
+<li><b>Scope.</b> These are course exercises on standard datasets, not production models.</li>
+</ul>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework">Source code, scripts and notes</a><a href="./#deeplearning">Back to projects</a></p>
+</div></div></section>
+
+</div></main>
+<footer class="foot"><div class="wrap"><span>&copy; <span id="yr">2026</span> Muhammad Huzaifa Shafique</span><span><a href="llms.txt">Plain-text summary for AI tools (llms.txt)</a></span></div></footer>
+<script src="site.js"></script>
+<script>
+(function () {
+  'use strict';
+  function tx(p, x, y, t, o) {
+    o = o || {};
+    return sv('text', { x: x, y: y, 'text-anchor': o.a || 'start', 'font-size': o.s || 11, fill: o.c || 'var(--ink2)', 'font-family': 'var(--sans)', 'font-weight': o.w || 400 }, p, t);
+  }
+  function ln(p, x1, y1, x2, y2, c, dash) {
+    var a = { x1: x1, y1: y1, x2: x2, y2: y2, stroke: c || 'var(--rule)', 'stroke-width': 1 };
+    if (dash) a['stroke-dasharray'] = dash;
+    return sv('line', a, p);
+  }
+  function cut(s, n) { return s.length > n ? s.slice(0, Math.max(1, n - 1)) + '…' : s; }
+  function attr(e, k) { return e.getAttribute('data-' + k); }
+
+  /* ---------- 1. training loss, epoch by epoch ---------- */
+  function lossChart(J) {
+    var Y = J.a2.loss, N = Y.length, V = J.a2.variance;
+    var bench = $('#a2-bench'), box = $('#c-loss'), rng = $('#e-rng'), out = $('#e-out'), play = $('#e-play');
+    var mode = 0, n = 121, timer = 0, cur, vl, dot, geo, P = 0;
+    while (Y[P] >= V * 0.99) P++;
+    bench.hidden = false;
+    seg($('#e-seg'), ['Linear scale', 'Log scale'], 0, function (i) { mode = i; draw(); });
+    function note(k) {
+      if (k >= 120 && k <= 122) return 'Spike. At epoch 121 the loss jumped to ' + f(Y[120], 1) + ' from ' + f(Y[119], 1) + ' at epoch 120 (' + f(Y[118], 1) + ' at epoch 119) and was back to ' + f(Y[122], 1) + ' by epoch 123. That pattern is consistent with a gradient step that overshot.';
+      if (k <= P) return 'Plateau. The loss stays within 1% of ' + f(V, 1) + ', the variance of the targets, so the network does no better than always predicting their mean.';
+      if (k < 120) return 'Breakout. The loss leaves the plateau and falls fast, from ' + f(Y[74], 1) + ' at epoch 75 to ' + f(Y[118], 1) + ' at epoch 119.';
+      return 'Slow improvement. The loss keeps falling, with small bumps, and ends at ' + f(Y[N - 1], 1) + ' at epoch ' + N + '.';
+    }
+    function pts(a, b) {
+      var p = [], i;
+      for (i = a; i <= b; i++) p.push(geo.x(i).toFixed(1) + ',' + geo.y(Y[i - 1]).toFixed(1));
+      return p.join(' ');
+    }
+    function set(k) {
+      n = Math.max(1, Math.min(N, Math.round(k)));
+      rng.value = n;
+      if (cur) {
+        var px = geo.x(n);
+        cur.setAttribute('points', pts(1, n));
+        vl.setAttribute('x1', px); vl.setAttribute('x2', px);
+        dot.setAttribute('cx', px); dot.setAttribute('cy', geo.y(Y[n - 1]));
+      }
+      out.textContent = '';
+      h('div', { 'class': 'b' }, out, 'Epoch ' + n + ' of ' + N + ': loss ' + f(Y[n - 1], 1) + ' (' + f(Y[n - 1] / V * 100, 1) + '% of the mean-prediction level)');
+      h('div', {}, out, note(n));
+    }
+    function stop() {
+      if (!timer) return;
+      clearInterval(timer); timer = 0; play.textContent = 'Play'; out.setAttribute('aria-live', 'polite');
+    }
+    function draw() {
+      box.textContent = '';
+      var W = box.clientWidth || 640, H = W < 520 ? 250 : 310, L = 58, R = 14, Tp = 14, B = 34;
+      var s = sv('svg', { viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Line chart of average mean-squared-error loss over ' + N + ' epochs: flat near ' + f(V, 1) + ' until about epoch ' + P + ', then falling to ' + f(Y[N - 1], 1) + ', with one spike at epoch 121.' }, box);
+      var x = lin(1, N, L, W - R), y = mode ? lg(10, 1000, H - B, Tp) : lin(0, 820, H - B, Tp);
+      geo = { x: x, y: y };
+      (mode ? [10, 100, 1000] : [0, 200, 400, 600, 800]).forEach(function (v, i) {
+        ln(s, L, y(v), W - R, y(v), (mode ? i === 0 : v === 0) ? 'var(--axis)' : 'var(--rule)');
+        tx(s, L - 7, y(v) + 4, comma(v), { a: 'end' });
+      });
+      [1, 100, 200, 300, 400, 500].forEach(function (v) { tx(s, x(v), H - B + 16, v, { a: v === 1 ? 'start' : v === N ? 'end' : 'middle' }); });
+      tx(s, (L + W - R) / 2, H - 4, 'Epoch', { a: 'middle' });
+      tx(s, 0, 0, 'Average MSE loss' + (mode ? ' (log scale)' : ''), { a: 'middle' }).setAttribute('transform', 'translate(12 ' + (Tp + (H - B - Tp) / 2) + ') rotate(-90)');
+      var ry = y(V);
+      ln(s, L, ry, W - R, ry, 'var(--mute)', '4 4');
+      tx(s, W - R, ry + 15, (W < 520 ? 'mean: ' : 'predicting the mean: ') + f(V, 1), { a: 'end' });
+      sv('polyline', { points: pts(1, N), fill: 'none', stroke: 'var(--blue)', 'stroke-opacity': 0.3, 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+      if (W >= 520) tx(s, x(121) + 8, y(Y[120]) + 4, 'epoch 121 spike');
+      cur = sv('polyline', { fill: 'none', stroke: 'var(--blue)', 'stroke-width': 2.6, 'stroke-linejoin': 'round' }, s);
+      vl = ln(s, 0, Tp, 0, H - B, 'var(--axis)');
+      dot = sv('circle', { r: 5.5, fill: 'var(--s2)', stroke: 'var(--bg)', 'stroke-width': 2 }, s);
+      var ov = sv('rect', { x: L, y: Tp, width: W - L - R, height: H - B - Tp, fill: 'transparent', style: 'cursor:ew-resize;touch-action:pan-y' }, s), down = false;
+      function at(ev) { var r = ov.getBoundingClientRect(); return 1 + (ev.clientX - r.left) / r.width * (N - 1); }
+      ov.addEventListener('pointerdown', function (ev) { down = true; stop(); set(at(ev)); try { ov.setPointerCapture(ev.pointerId); } catch (err) {} });
+      ov.addEventListener('pointermove', function (ev) { if (down) set(at(ev)); });
+      ov.addEventListener('pointerup', function () { down = false; });
+      ov.addEventListener('pointercancel', function () { down = false; });
+      set(n);
+    }
+    rng.addEventListener('input', function () { stop(); set(+rng.value); });
+    [['Plateau', 40], ['Breakout', 95], ['Spike', 121], ['End', N]].forEach(function (j) {
+      h('button', { 'class': 'btn', type: 'button' }, $('#e-jumps'), j[0]).addEventListener('click', function () { stop(); set(j[1]); });
+    });
+    if (calm) play.hidden = true;
+    else play.addEventListener('click', function () {
+      if (timer) { stop(); return; }
+      if (n >= N) n = 1;
+      play.textContent = 'Pause'; out.setAttribute('aria-live', 'off');
+      timer = setInterval(function () { set(n + 3); if (n >= N) stop(); }, 24);
+    });
+    fit(box, draw);
+  }
+  getJSON('nn-data.json', lossChart);
+
+  /* ---------- 2. ten Keras experiments ---------- */
+  function a3() {
+    var li = $$('#a3-list > li');
+    if (!li.length) return;
+    var D = li.map(function (e) { return { id: +attr(e, 'id'), name: attr(e, 'name'), val: +attr(e, 'val'), test: +attr(e, 'test'), mae: +attr(e, 'mae'), kept: attr(e, 'kept') === '1' }; });
+    var bench = $('#a3-bench'), viz = $('.viz', bench), box = $('#c-a3'), verdict = $('#a3-verdict'), note = $('#a3-note'), prev = $('#a3-prev'), next = $('#a3-next');
+    var metric = 0, cur = 0, bs;
+    var M = [
+      { k: 'val', t: 'Validation MAPE (%)', lo: 18, hi: 23, ticks: [18, 19, 20, 21, 22, 23], tick: function (v) { return v + '%'; }, fmt: function (v) { return f(v, 2) + '%'; }, rule: true,
+        note: 'The dashed line is the best validation MAPE before the selected experiment. A change is kept only if its dot lands to the left of it.' },
+      { k: 'test', t: 'Test MAPE (%)', lo: 18, hi: 23, ticks: [18, 19, 20, 21, 22, 23], tick: function (v) { return v + '%'; }, fmt: function (v) { return f(v, 2) + '%'; },
+        note: 'The keep or revert rule used validation MAPE. This view shows the same models on the test set; Model 5 is lowest here too.' },
+      { k: 'mae', t: 'Test MAE ($)', lo: 33000, hi: 43000, ticks: [34000, 36000, 38000, 40000, 42000], tick: function (v) { return '$' + v / 1000 + 'k'; }, fmt: function (v) { return '$' + comma(v); },
+        note: 'Dollar error and MAPE can disagree. Model 6 has the lowest test MAE ($34,670) but a worse MAPE than Model 5, so the metric should match the question being asked.' }
+    ];
+    viz.hidden = false; bench.classList.add('on');
+    seg($('#a3-seg'), ['Validation', 'Test MAPE', 'Test MAE'], 0, function (i) { metric = i; draw(); });
+    bs = seg($('#a3-num'), D.map(function (d) { return String(d.id); }), 0, function (i) { go(i); });
+    prev.addEventListener('click', function () { go(cur - 1); });
+    next.addEventListener('click', function () { go(cur + 1); });
+    function best(i) { var m = Infinity, j; for (j = 0; j < i; j++) m = Math.min(m, D[j].val); return m; }
+    function go(i) {
+      cur = Math.max(0, Math.min(D.length - 1, i));
+      bs.forEach(function (b, j) { b.setAttribute('aria-pressed', String(j === cur)); });
+      li.forEach(function (e, j) { e.hidden = j !== cur; });
+      prev.disabled = cur === 0; next.disabled = cur === D.length - 1;
+      var d = D[cur], b = best(cur);
+      verdict.textContent = cur === 0 ? 'Starting point: validation MAPE ' + f(d.val, 2) + '%.' :
+        'Validation MAPE ' + f(d.val, 2) + '%, against ' + f(b, 2) + '% for the best configuration so far: ' + (d.kept ? 'an improvement, so the change is kept.' : 'no improvement, so the change is reverted.');
+      draw();
+    }
+    function draw() {
+      box.textContent = '';
+      var m = M[metric], W = box.clientWidth || 640, narrow = W < 560, rh = narrow ? 30 : 32, Tp = 26, B = 42, H = Tp + rh * D.length + B;
+      var Lw = narrow ? 26 : Math.min(240, Math.round(W * 0.36)), Rw = narrow ? 0 : 92, PR = W - Rw - 58, bot = Tp + rh * D.length;
+      var x = lin(m.lo, m.hi, Lw + 10, PR);
+      var s = sv('svg', { viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Dot plot of ' + m.t + ' for the ten experiments. Table view below.' }, box);
+      note.textContent = m.note;
+      m.ticks.forEach(function (v) { ln(s, x(v), Tp, x(v), bot); tx(s, x(v), bot + 16, m.tick(v), { a: 'middle' }); });
+      tx(s, (Lw + 10 + PR) / 2, H - 6, m.t + ', lower is better', { a: 'middle' });
+      D.forEach(function (d, i) {
+        var cy = Tp + rh * i + rh / 2, sel = i === cur, v = d[m.k];
+        if (sel) sv('rect', { x: 0, y: Tp + rh * i + 1, width: W, height: rh - 2, rx: 8, fill: 'rgba(51,140,237,.14)' }, s);
+        tx(s, 6, cy + 4, narrow ? d.id : d.id + '. ' + cut(d.name, Math.floor((Lw - 22) / 6.3)), { c: sel ? 'var(--ink)' : 'var(--ink2)', w: sel ? 600 : 400, s: 12 });
+        sv('circle', { cx: x(v), cy: cy, r: sel ? 7 : 5.5, fill: d.kept ? 'var(--blue)' : 'var(--mute)', stroke: sel ? 'var(--ink)' : 'var(--bg)', 'stroke-width': 2 }, s);
+        tx(s, x(v) + 12, cy + 4, m.fmt(v), { c: sel ? 'var(--ink)' : 'var(--ink2)' });
+        if (!narrow) tx(s, W - 4, cy + 4, d.id === 1 ? 'baseline' : d.kept ? 'kept' : 'reverted', { a: 'end', c: d.kept ? 'var(--ink)' : 'var(--mute)', w: d.kept ? 600 : 400 });
+      });
+      if (m.rule && cur > 0) {
+        var bx = x(best(cur));
+        ln(s, bx, Tp - 6, bx, bot, 'var(--ink2)', '4 3');
+        tx(s, Math.min(Math.max(bx, 70), W - 70), Tp - 10, 'best so far ' + f(best(cur), 2) + '%', { a: 'middle' });
+      }
+      D.forEach(function (d, i) {
+        var r = sv('rect', { x: 0, y: Tp + rh * i, width: W, height: rh, fill: 'transparent', style: 'cursor:pointer' }, s);
+        r.addEventListener('click', function () { go(i); });
+        hover(r, function () { return [d.id + '. ' + d.name, m.t + ': ' + m.fmt(d[m.k]), d.id === 1 ? 'Baseline' : d.kept ? 'Kept' : 'Reverted']; });
+      });
+    }
+    fit(box, draw);
+    go(0);
+  }
+  a3();
+
+  /* ---------- 3. ten CNN variations ---------- */
+  function a4() {
+    var li = $$('#a4-list > li');
+    if (!li.length) return;
+    var D = li.map(function (e) { var t = attr(e, 'train'); return { id: +attr(e, 'id'), name: attr(e, 'name'), test: +attr(e, 'test'), train: t === '' ? null : +t }; });
+    var base = D[0].test, bench = $('#a4-bench'), viz = $('.viz', bench), box = $('#c-a4'), lgd = $('#a4-lg'), note = $('#a4-note'), mode = 0, sel = 1;
+    viz.hidden = false; bench.classList.add('on');
+    seg($('#a4-seg'), ['Test accuracy', 'Training vs test'], 0, function (i) { mode = i; draw(); });
+    function pick(i) {
+      sel = i;
+      li.forEach(function (e, j) { e.hidden = j !== sel; });
+      $$('.ab', box).forEach(function (r, j) { r.setAttribute('aria-pressed', String(j === sel)); });
+      if (mode) draw();
+    }
+    function legend(items) {
+      lgd.textContent = '';
+      items.forEach(function (it) { var s = h('span', it[1] ? { 'class': it[1] } : {}, lgd); h('i', {}, s); s.appendChild(document.createTextNode(it[0])); });
+    }
+    function bars() {
+      note.textContent = 'Bars start at zero and the dashed line marks the base model (' + f(base, 2) + '%). Beside each bar: test accuracy, then the change in points against the base model. Select a row to read what changed.';
+      legend([['Base model (reference)', ''], ['Variation', 'b']]);
+      var wrap = h('div', { 'class': 'abs', role: 'group', 'aria-label': 'Test accuracy by variation. Select a row to read about it.' }, box);
+      wrap.style.setProperty('--ref', (base / 80 * 100) + '%');
+      D.forEach(function (d, i) {
+        var r = h('div', { 'class': 'ab' + (i === 0 ? ' base' : ''), role: 'button', tabindex: '0', 'aria-pressed': String(i === sel) }, wrap);
+        h('span', { 'class': 'l' }, r, d.id + '. ' + d.name);
+        h('i', { style: 'width:' + (d.test / 80 * 100) + '%' }, h('span', { 'class': 'b' }, r));
+        var v = h('span', { 'class': 'v' }, r, f(d.test, 2) + '%');
+        if (i) h('small', {}, v, (d.test >= base ? '+' : '-') + f(Math.abs(d.test - base), 2));
+        r.addEventListener('click', function () { pick(i); });
+        r.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(i); } });
+      });
+    }
+    function pair() {
+      note.textContent = 'Training accuracy is reported for four of the ten runs. Batch normalization and more epochs sit 20 to 23 points above their test accuracy, the overfitting pattern. Dropout and augmentation sit below it, because they only act on training batches.';
+      legend([['Test accuracy', 'b'], ['Training accuracy', 's2']]);
+      var P = D.filter(function (d) { return d.train != null; });
+      var W = box.clientWidth || 600, narrow = W < 560, rh = 50, Tp = 12, B = 42, H = Tp + rh * P.length + B, Lw = narrow ? 120 : 210, PR = W - 16, bot = Tp + rh * P.length;
+      var x = lin(50, 100, Lw + 10, PR);
+      var s = sv('svg', { viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img', 'aria-label': 'Training and test accuracy for four variations. Table view below.' }, box);
+      [50, 60, 70, 80, 90, 100].forEach(function (v) { ln(s, x(v), Tp, x(v), bot); tx(s, x(v), bot + 16, v + '%', { a: 'middle' }); });
+      tx(s, (Lw + 10 + PR) / 2, H - 6, 'Accuracy (%)', { a: 'middle' });
+      P.forEach(function (d, i) {
+        var cy = Tp + rh * i + rh / 2, on = D[sel] === d, lo = Math.min(d.test, d.train), hi = Math.max(d.test, d.train), gap = d.train - d.test;
+        if (on) sv('rect', { x: 0, y: Tp + rh * i + 1, width: W, height: rh - 2, rx: 8, fill: 'rgba(51,140,237,.14)' }, s);
+        tx(s, 6, cy - 2, d.id + '. ' + cut(d.name, Math.floor((Lw - 14) / 6.5)), { c: on ? 'var(--ink)' : 'var(--ink2)', w: on ? 600 : 400, s: 12 });
+        tx(s, 6, cy + 13, 'train minus test: ' + (gap >= 0 ? '+' : '-') + f(Math.abs(gap), 1), { s: 10.5, c: 'var(--mute)' });
+        ln(s, x(lo), cy, x(hi), cy, 'var(--axis)').setAttribute('stroke-width', 3);
+        sv('circle', { cx: x(d.test), cy: cy, r: 6, fill: 'var(--s1)', stroke: 'var(--bg)', 'stroke-width': 2 }, s);
+        sv('circle', { cx: x(d.train), cy: cy, r: 6, fill: 'var(--s2)', stroke: 'var(--bg)', 'stroke-width': 2 }, s);
+        tx(s, x(lo) - 11, cy + 4, f(lo, 2), { a: 'end' });
+        tx(s, x(hi) + 11, cy + 4, f(hi, 2), { a: 'start' });
+        var r = sv('rect', { x: 0, y: Tp + rh * i, width: W, height: rh, fill: 'transparent', style: 'cursor:pointer' }, s);
+        r.addEventListener('click', function () { pick(D.indexOf(d)); });
+        hover(r, function () { return [d.id + '. ' + d.name, 'Test accuracy: ' + f(d.test, 2) + '%', 'Training accuracy: ' + f(d.train, 2) + '%']; });
+      });
+    }
+    function draw() { box.textContent = ''; if (mode) pair(); else bars(); }
+    fit(box, draw);
+    pick(1);
+  }
+  a4();
+})();
+</script>
+</body>
+</html>
