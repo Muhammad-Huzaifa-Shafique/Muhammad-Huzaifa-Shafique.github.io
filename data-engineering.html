@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oklahoma Legislature Vote Extractor: web scraping and data-quality checks | Muhammad Huzaifa Shafique</title>
+<meta name="description" content="A Python tool that collects 30,475 Oklahoma House votes (1999 to 2025) into tidy CSV files, and the data-quality checks I ran on its output: seat totals, member coverage, blank fields and mislabeled columns.">
+<meta name="author" content="Muhammad Huzaifa Shafique">
+<meta name="robots" content="index,follow,max-snippet:-1">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/data-engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oklahoma Legislature Vote Extractor and the checks I ran on its output">
+<meta property="og:description" content="30,475 House votes, 1999 to 2025. What the extractor got right, and where it falls short.">
+<meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/data-engineering.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23191919'/%3E%3Crect x='6' y='6' width='6' height='6' rx='1' fill='%23338ced'/%3E%3Crect x='13' y='6' width='6' height='6' rx='1' fill='%23338ced'/%3E%3Crect x='20' y='6' width='6' height='6' rx='1' fill='%23aab2bc'/%3E%3Crect x='6' y='13' width='6' height='6' rx='1' fill='%23338ced'/%3E%3Crect x='13' y='13' width='6' height='6' rx='1' fill='%23aab2bc'/%3E%3Crect x='20' y='13' width='6' height='6' rx='1' fill='%23aab2bc'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<style>
+.hm{font:11px var(--sans);color:var(--ink2)}
+.hr{display:grid;grid-template-columns:2.7rem repeat(12,minmax(0,1fr)) 7.6rem;gap:2px;align-items:center;height:16px}
+.hr.hh{height:20px;color:var(--ink2);text-align:center}
+.hr>b{font-weight:400;text-align:right;padding-right:.45rem;font-variant-numeric:tabular-nums}
+.hr>i{display:block;height:14px;border-radius:2px;background:var(--blue)}
+.hr>i.z{background:var(--wash)}
+.hr .tt{display:grid;grid-template-columns:minmax(0,1fr) 2.7rem;gap:.35rem;align-items:center;padding-left:.5rem;text-align:left}
+.hr .tt s{display:block;height:8px;background:var(--mute);border-radius:0 3px 3px 0;text-decoration:none}
+.hr .tt span{color:var(--ink);font-variant-numeric:tabular-nums;text-align:right}
+.hr.hh .tt{display:block}
+#sm svg,#cv svg{display:block;max-width:100%}
+#sm{margin:.2rem 0 .3rem}
+.lg .h i{background:transparent;box-shadow:inset 0 0 0 2px var(--ink2)}
+.vd{font:.88rem/1.5 var(--sans);color:var(--ink2);margin:.2rem 0 .6rem;max-width:none}
+.ctl2{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;margin:0 0 .7rem}
+table.chk td:nth-child(3){white-space:nowrap;font-weight:600}
+pre.smp{font-size:.78rem;line-height:1.45}
+@media (max-width:560px){.hr{grid-template-columns:2.3rem repeat(12,minmax(0,1fr)) 5.1rem}.hr .tt{grid-template-columns:minmax(0,1fr) 2.3rem;padding-left:.3rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Oklahoma Legislature Vote Extractor and the checks I ran on its output","url":"https://muhammad-huzaifa-shafique.github.io/data-engineering.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Web scraping","Data cleaning","Data quality","Data validation"],"keywords":"web scraping, asyncio, aiohttp, regular expressions, data cleaning, data validation, data quality checks, pandas, CSV, tidy data, reconciliation, fixed-width parsing, openpyxl","isBasedOn":[{"@type":"SoftwareSourceCode","name":"Oklahoma-Legislature-Vote-Extractor","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor"},{"@type":"SoftwareSourceCode","name":"Fixed-Width-Data-Extractor","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Fixed-Width-Data-Extractor"}]}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+<a class="mark" href="./">Muhammad Huzaifa Shafique</a>
+<nav aria-label="Main"><a href="./#projects">Projects</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+</div></header>
+<main id="main"><div class="wrap">
+
+<section class="hero sm" aria-labelledby="h1">
+<p class="crumb"><a href="./#more">Data engineering</a> / Oklahoma legislature vote extractor</p>
+<h1 id="h1" style="max-width:24ch">Oklahoma legislature vote extractor, and the checks I ran on its output</h1>
+<p class="lede">A Python tool that collects House and Senate vote records from the Oklahoma legislature's public pages and writes three CSV files: one row per vote, one row per member's vote, and a list of members. It was a team project with classmates in a graduate course (GRT713), and my part was the House votes. This page shows what the House output contains and where it falls short.</p>
+<p class="links"><a href="#checks">See the checks</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor">Source code</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor/blob/main/audit_output.py">The check script</a><a href="#fixed">Fixed-width extractor</a></p>
+<p class="rel"><b>Relevant to:</b> web scraping (asyncio, aiohttp), parsing semi-structured text with regular expressions, data cleaning, data validation and data-quality checks, reconciling two tables, pandas, tidy CSV output.</p>
+</section>
+
+<section class="sec" aria-labelledby="h-what"><div class="row"><h2 id="h-what">What it does</h2><div class="body">
+<p>Most machine-learning projects start with records nobody prepared for analysis. This is that first step on a messy public source: collect many pages in parallel, cut each vote out of the page text, clean names and duplicates, and save tables that pandas or a database can load.</p>
+<ol class="steps">
+<li><span><b>Find the votes.</b> In Auto mode it tries vote ID numbers on the former House site for the 47th to 60th Legislatures, or walks the Senate site's pages for 2006 to 2025. In manual mode you pick your own files or links.</span></li>
+<li><span><b>Fetch and read.</b> Pages are fetched in parallel with asyncio and aiohttp, and PDFs are converted to text. Each vote is cut out of the page text.</span></li>
+<li><span><b>Clean.</b> For each vote it reads the bill number, type, the counts (Yea, Nay, CP, Excused, Vacant), the result, place, date and time, and the member names under each count. It splits names that were run together, removes titles and drops duplicate records.</span></li>
+<li><span><b>Save.</b> It writes the three CSV files below.</span></li>
+</ol>
+<div class="scroll"><table class="t">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">The three output files. CP is constitutional privilege, a label read from the vote pages.</caption>
+<thead><tr><th scope="col">File</th><th scope="col">One row per</th><th scope="col">Columns</th></tr></thead>
+<tbody>
+<tr><td><code>VotesDetail.csv</code></td><td>vote</td><td>Unique Index, Bill Number, Type, Yea, Nay, CP, Excused, Vacant, Result, Location, Date, Time</td></tr>
+<tr><td><code>VoteRollCall.csv</code></td><td>member's vote</td><td>Unique Index, Votes Detail Index, Bill Number, Member, Vote, Type, Result, Location, Date, Time</td></tr>
+<tr><td><code>Members.csv</code></td><td>member</td><td>Unique Index, Chamber, District, Member</td></tr>
+</tbody></table></div>
+<p>As the script's header says, I used ChatGPT while writing it, and the first lines link that conversation.</p>
+</div></div></section>
+
+<section class="sec" id="collected" aria-labelledby="h-col"><div class="row"><h2 id="h-col">What it collected</h2><div class="body">
+<p>30,475 House votes dated from January 1999 to May 2025. Darker cells mean more votes that month, and the bar at the right is the year's total. About 99% of the votes fall between February and May, which is when the legislature meets.</p>
+<div class="bench">
+<header><h3>House votes by year and month</h3></header>
+<div class="hm" id="hm" role="img" aria-label="Heat map of 30,475 House votes by year, 1999 to 2025, and month. Almost all votes fall between February and May. Yearly totals range from 608 in 2020 to 1,583 in 2004. A table follows the chart."></div>
+</div>
+<details><summary>Show the numbers as a table</summary>
+<div class="scroll"><table class="t" id="htab">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">Votes per month, the total, and the share of counted seats that have a member name in VoteRollCall.csv.</caption>
+<thead></thead><tbody></tbody></table></div></details>
+</div></div></section>
+
+<section class="sec" id="checks" aria-labelledby="h-chk"><div class="row"><h2 id="h-chk">Checking the output</h2><div class="body">
+<p>The extractor had no tests, so I ran a short pandas script (<code>audit_output.py</code>) over the House output. Each vote page gives counts (for example, 87 Yea and 10 Nay) and then lists the member names under each count, so the two can be compared. Here is what the checks found.</p>
+<div class="scroll"><table class="t chk">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">Checks on the 30,475 House votes in VotesDetail.csv and the 2,341,376 member rows in VoteRollCall.csv.</caption>
+<thead><tr><th scope="col">Question</th><th scope="col">What I found</th><th scope="col">Verdict</th></tr></thead>
+<tbody>
+<tr><td>Do the counts add up to the size of the House?</td><td>30,471 of 30,475 votes total between 99 and 105 seats (99.99%), and 26,019 total exactly 101. The other four total 83, 106, 108 and 109.</td><td>Passes</td></tr>
+<tr><td>Does every counted seat have a named member?</td><td>2,341,376 member rows for 3,079,673 counted seats (76%). Only 1 of 30,475 votes has a name for every seat.</td><td>Falls short</td></tr>
+<tr><td>Is the Result filled in?</td><td>Blank on 21,564 votes (71%). Where it is filled in: 7,279 Pass and 1,632 Fail.</td><td>Falls short</td></tr>
+<tr><td>Is the bill number filled in?</td><td>Blank on 1,646 votes (5%).</td><td>Falls short</td></tr>
+<tr><td>Is Type a real vote type?</td><td>71 votes (0.2%) hold leftover text, such as part of a bill title, instead of Third Reading, Fourth Reading or General Order.</td><td>Mostly passes</td></tr>
+<tr><td>Does Location say where the vote happened?</td><td>It follows the bill prefix. 16,794 of 16,816 HB votes say House Floor, and 11,945 of 11,950 SB votes say Senate Floor. Those vote totals are still House-sized (99 to 109 seats, and the Senate has 48 members), so all of them are House votes.</td><td>Mislabeled</td></tr>
+<tr><td>Does the Member column hold only names?</td><td>It also holds VAC (4,538 rows), PM (705) and AM (184).</td><td>Needs cleaning</td></tr>
+</tbody></table></div>
+<p>The second row is the one that matters for anyone who wants to use the member rows. Here is what it looks like inside single votes.</p>
+
+<div class="bench">
+<header><h3>One vote, seat by seat</h3><div class="ctl2"><div class="seg" id="vsel" role="group" aria-label="Choose a vote"></div><div class="seg" id="vview" role="group" aria-label="What to show"></div></div></header>
+<p class="vd" id="vd"></p>
+<div id="sm" role="img" aria-label="One square for each seat counted on the vote page, colored by Yea, Nay, CP or Excused. In the view of captured names, squares without a name are hollow."></div>
+<div class="lg"><span class="b"><i></i>Yea</span><span class="s2"><i></i>Nay</span><span class="s3"><i></i>CP</span><span><i></i>Excused</span><span class="h"><i></i>Counted, no name in the CSV</span></div>
+<p class="out" id="so" aria-live="polite"></p>
+</div>
+
+<div class="bench">
+<header><h3>Share of counted seats that have a name</h3></header>
+<div id="cb"></div>
+<p class="cap" style="margin-top:.8rem">By vote category, across all 30,475 votes. Vacant seats (8,174) never have a name, and leaving them out gives 76.2% overall.</p>
+<h3 style="font:600 .9rem var(--sans);margin:1.3rem 0 .2rem">By year</h3>
+<div id="cv" role="img" aria-label="Line chart of the share of counted seats that have a member name, by year, 1999 to 2025. It stays between 67% and 83%, lowest in 2022 and highest in 2023."></div>
+</div>
+<p><b style="font:600 .9rem var(--sans)">Why is that?</b> I have not traced the cause. Either the extractor drops names while cutting votes out of the page text, or the pages themselves list fewer names than their counts. Reading a few source pages against their rows is the next step, and the check script now makes the effect measurable.</p>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-lim"><div class="row"><h2 id="h-lim">Limits and next steps</h2><div class="body">
+<ul>
+<li><b>Written for the sites as they were in fall 2025.</b> Page layouts and addresses may have changed since, so check a few pages before relying on it.</li>
+<li><b>The checks cover the House output only.</b> The script can also collect Senate votes, but I have not run those files through the same checks.</li>
+<li><b>Parsing relies on text patterns.</b> An unusual layout can drop a vote or split a name in the wrong place, which fits what the checks found.</li>
+<li><b>It is one long script</b> that asks its questions through dialogs rather than command-line options.</li>
+<li><b>No data is included</b> in the repository. The CSV files are created when you run it.</li>
+</ul>
+<p>Next: hand-count a few saved pages and use them as tests, find where the missing names go, then split the script into modules with command-line options.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor">Source code</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor/blob/main/audit_output.py">audit_output.py</a></p>
+</div></div></section>
+
+<section class="sec" id="fixed" aria-labelledby="h-fx"><div class="row"><h2 id="h-fx">Fixed-width data extractor</h2><div class="body">
+<p>A second data-preparation script, written for the same course together with a classmate. It turns a fixed-width text report into a clean Excel table: it finds the columns from the report's header, rebuilds rows that wrap across several lines, and saves a formatted <code>.xlsx</code> file next to the input. We compared our outputs on the course file and they matched.</p>
+<ol class="steps">
+<li><span><b>Find the columns.</b> The header line with the most gaps of four or more spaces is the template, and each gap marks a column boundary.</span></li>
+<li><span><b>Build the column names.</b> The three header lines are merged piece by piece, so a name that wraps over three lines becomes one name.</span></li>
+<li><span><b>Find the rows.</b> A new record starts when column 19 is not blank. A line where it is blank continues the previous record.</span></li>
+<li><span><b>Rejoin wrapped text.</b> If the previous piece filled its whole column, the next piece is joined with no space (a word cut in the middle). Otherwise it is joined with one space.</span></li>
+<li><span><b>Write the Excel file.</b> Bold header row, wrapped text, fitted column widths, a frozen header and an auto-filter.</span></li>
+</ol>
+<p>Here is the synthetic sample from the repository. Record 1001 wraps at a space, and record 1003 wraps in the middle of a word ("anch" and "or").</p>
+<pre class="smp">Item..    Customer............    Product.............    Unit......
+No....    Name................    Description.........    Price.....
+......    ....................    ....................    (USD).....
+1001      Northwind Traders       Hex bolt, zinc          0.35
+                                  plated
+1002      Contoso Hardware        Pipe wrench 18 inch     12.90
+1003      Fabrikam-Supply Co      Stainless steel anch    3.10
+                                  or bolt</pre>
+<div class="scroll"><table class="t">
+<thead><tr><th scope="col">Item No</th><th scope="col">Customer Name</th><th scope="col">Product Description</th><th scope="col" class="n">Unit Price (USD)</th></tr></thead>
+<tbody>
+<tr><td>1001</td><td>Northwind Traders</td><td>Hex bolt, zinc plated</td><td class="n">0.35</td></tr>
+<tr><td>1002</td><td>Contoso Hardware</td><td>Pipe wrench 18 inch</td><td class="n">12.90</td></tr>
+<tr><td>1003</td><td>Fabrikam-Supply Co</td><td>Stainless steel anchor bolt</td><td class="n">3.10</td></tr>
+</tbody></table></div>
+<p class="limit"><b>Limit.</b> Every cell is written as text, including numbers such as 12.90, so convert numeric columns before analysis. The layout rules (three header lines, the row marker in column 19) fit the course report only, and I have no unit tests for edge cases such as a value that wraps twice.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Fixed-Width-Data-Extractor">Source code</a><a href="./#projects">Back to all projects</a></p>
+</div></div></section>
+
+</div></main>
+<footer class="foot"><div class="wrap"><span>&copy; <span id="yr">2026</span> Muhammad Huzaifa Shafique</span><span><a href="llms.txt">Plain-text summary for AI tools (llms.txt)</a></span></div></footer>
+<script src="site.js"></script>
+<script>
+(function () {
+  var YEARS = [1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025], VOTES = [1168,1240,1230,1440,1396,1583,1507,1501,1312,1361,1481,1555,1065,968,1088,937,825,846,884,742,894,608,1031,1026,960,865,962], MONTH = [[4,242,351,201,346,24,0,0,0,0,0,0],[0,129,410,401,297,3,0,0,0,0,0,0],[0,202,325,387,306,0,0,0,0,10,0,0],[0,209,476,417,337,0,0,0,0,0,1,0],[3,179,361,471,382,0,0,0,0,0,0,0],[0,181,527,527,343,0,0,0,5,0,0,0],[3,153,539,443,366,3,0,0,0,0,0,0],[0,91,681,373,213,143,0,0,0,0,0,0],[1,296,435,310,270,0,0,0,0,0,0,0],[0,221,467,368,305,0,0,0,0,0,0,0],[1,300,436,372,372,0,0,0,0,0,0,0],[0,286,541,334,394,0,0,0,0,0,0,0],[1,47,406,361,250,0,0,0,0,0,0,0],[0,102,351,288,220,0,0,0,0,7,0,0],[3,110,331,292,286,0,0,0,66,0,0,0],[0,104,313,305,215,0,0,0,0,0,0,0],[1,94,304,290,136,0,0,0,0,0,0,0],[1,94,293,277,181,0,0,0,0,0,0,0],[3,80,294,270,200,0,0,0,1,11,22,3],[0,24,333,273,112,0,0,0,0,0,0,0],[2,65,326,339,162,0,0,0,0,0,0,0],[0,30,425,4,148,0,0,1,0,0,0,0],[2,36,436,383,167,0,0,0,0,0,7,0],[0,8,409,274,257,51,0,0,27,0,0,0],[2,29,451,263,212,2,1,0,0,0,0,0],[1,55,401,240,168,0,0,0,0,0,0,0],[2,22,427,95,416,0,0,0,0,0,0,0]], COV = [76.5,76.3,73.5,77.2,78.4,75.8,72.2,72.2,69.4,69.8,79.5,79.6,80.7,75.9,76.4,76.8,78.8,79.4,79.6,72.2,76.8,78.0,68.0,67.2,83.3,83.1,83.1];
+  var MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MX = 0, VM = 0;
+  MONTH.forEach(function (r) { r.forEach(function (v) { if (v > MX) MX = v; }); });
+  VOTES.forEach(function (v) { if (v > VM) VM = v; });
+
+  function heat() {
+    var box = $('#hm'), narrow = box.clientWidth < 520;
+    box.textContent = '';
+    var hd = h('div', { 'class': 'hr hh' }, box);
+    h('b', {}, hd, '');
+    MN.forEach(function (m) { h('span', {}, hd, narrow ? m.charAt(0) : m); });
+    var th = h('span', { 'class': 'tt' }, hd, narrow ? 'Votes' : 'Votes in the year');
+    th.style.textAlign = 'left'; th.style.paddingLeft = '.5rem';
+    YEARS.forEach(function (y, i) {
+      var r = h('div', { 'class': 'hr' }, box);
+      h('b', {}, r, String(y));
+      MONTH[i].forEach(function (c, j) {
+        var cell = h('i', { 'class': c ? '' : 'z' }, r);
+        if (c) cell.style.opacity = (0.14 + 0.86 * Math.sqrt(c / MX)).toFixed(2);
+        hover(cell, function () { return [MN[j] + ' ' + y, comma(c) + (c === 1 ? ' vote' : ' votes')]; });
+      });
+      var t = h('span', { 'class': 'tt' }, r);
+      h('s', { style: 'width:' + (VOTES[i] / VM * 100) + '%' }, t);
+      h('span', {}, t, comma(VOTES[i]));
+      hover(t, function () { return [String(y), comma(VOTES[i]) + ' votes', 'Seats with a member name: ' + f(COV[i], 1) + '%']; });
+    });
+  }
+
+  function htable() {
+    var hd = $('#htab thead'), tr = h('tr', {}, hd);
+    ['Year'].concat(MN).concat(['Total', 'Seats with a name']).forEach(function (t, i) { h('th', { scope: 'col', 'class': i ? 'n' : '' }, tr, t); });
+    var tb = $('#htab tbody');
+    YEARS.forEach(function (y, i) {
+      var r = h('tr', {}, tb);
+      h('td', {}, r, String(y));
+      MONTH[i].forEach(function (c) { h('td', { 'class': 'n' }, r, String(c)); });
+      h('td', { 'class': 'n' }, r, comma(VOTES[i]));
+      h('td', { 'class': 'n' }, r, f(COV[i], 1) + '%');
+    });
+  }
+
+  var VOTE = [
+    { id: 1, desc: 'Third reading, 5 January 1999. No bill number was captured.', c: [87, 10, 0, 4], n: [74, 4, 0, 4] },
+    { id: 2, desc: 'Third reading, 5 January 1999. No bill number was captured.', c: [37, 54, 0, 10], n: [28, 45, 0, 6] },
+    { id: 5, desc: 'Third reading, 22 January 1999. No bill number was captured.', c: [85, 11, 1, 4], n: [66, 11, 1, 4] },
+    { id: 9, desc: 'HB 1510, third reading, 3 February 1999.', c: [99, 2, 0, 1], n: [74, 2, 0, 1] }
+  ];
+  var CAT = ['Yea', 'Nay', 'CP', 'Excused'], CCOL = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--mute)'];
+  var vi = 0, view = 1;
+  function sum(a) { return a.reduce(function (p, q) { return p + q; }, 0); }
+
+  function seats() {
+    var box = $('#sm'), V = VOTE[vi], tot = sum(V.c), cols = 17, rows = Math.ceil(tot / cols);
+    box.textContent = '';
+    var W = box.clientWidth || 400, g = Math.max(2, Math.round(W / cols * 0.14));
+    var cs = Math.min(26, Math.floor((W - g * (cols - 1)) / cols));
+    var w = cols * cs + (cols - 1) * g, ht = rows * cs + (rows - 1) * g;
+    var s = sv('svg', { width: w, height: ht, viewBox: '0 0 ' + w + ' ' + ht, 'aria-hidden': 'true' }, box);
+    var k = 0;
+    V.c.forEach(function (cnt, ci) {
+      for (var q = 0; q < cnt; q++) {
+        var has = view === 0 || q < V.n[ci];
+        var x = (k % cols) * (cs + g), y = Math.floor(k / cols) * (cs + g);
+        var r = sv('rect', { x: x + 1, y: y + 1, width: cs - 2, height: cs - 2, rx: 3, fill: has ? CCOL[ci] : 'none', stroke: has ? 'none' : CCOL[ci], 'stroke-width': 2 }, s);
+        (function (cat, has2) {
+          hover(r, function () { return [cat, view === 0 ? 'Counted on the vote page' : (has2 ? 'A name is in the CSV' : 'Counted, but no name in the CSV')]; });
+        })(CAT[ci], has);
+        k++;
+      }
+    });
+    var got = sum(V.n), miss = [];
+    V.c.forEach(function (cnt, ci) { if (V.n[ci] < cnt) miss.push((cnt - V.n[ci]) + ' ' + CAT[ci]); });
+    $('#vd').textContent = 'Unique Index ' + V.id + ' in VotesDetail.csv. ' + V.desc;
+    $('#so').textContent = 'The vote page counts ' + tot + ' seats: ' + V.c[0] + ' Yea, ' + V.c[1] + ' Nay' + (V.c[2] ? ', ' + V.c[2] + ' CP' : '') + ' and ' + V.c[3] + ' Excused. VoteRollCall.csv names ' + got + ' of them' + (miss.length ? '. Missing: ' + miss.join(', ') + '.' : '.');
+  }
+
+  function cats() {
+    var box = $('#cb'); box.textContent = '';
+    [['Yea', 74.8, '1,856,377 of 2,480,466 counted'], ['Nay', 79.8, '260,724 of 326,815 counted'], ['Excused', 84.6, '218,493 of 258,389 counted'], ['CP', 99.2, '5,782 of 5,829 counted'], ['All seats', 76.0, '2,341,376 of 3,079,673 counted']].forEach(function (r, i) {
+      var row = h('div', { 'class': 'hb' + (i === 4 ? ' f' : ''), tabindex: '0' }, box);
+      h('span', { 'class': 'l' }, row, r[0]);
+      var b = h('span', { 'class': 'b' }, row);
+      h('i', { style: 'width:' + r[1] + '%' }, b);
+      h('span', { 'class': 'v' }, row, f(r[1], 1) + '%');
+      hover(row, function () { return [r[0], f(r[1], 1) + '% have a name', r[2]]; });
+    });
+  }
+
+  function cover() {
+    var box = $('#cv'), W = box.clientWidth || 640, narrow = W < 520, H = narrow ? 200 : 230, L = 38, R = 12, T = 14, B = 30;
+    box.textContent = '';
+    var s = sv('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, 'aria-hidden': 'true' }, box);
+    var x = lin(0, YEARS.length - 1, L + 8, W - R - 8), y = lin(60, 90, H - B, T);
+    [60, 70, 80, 90].forEach(function (v) {
+      sv('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: 'var(--rule)', 'stroke-width': 1 }, s);
+      sv('text', { x: L - 7, y: y(v) + 4, 'text-anchor': 'end', 'font-size': 11, fill: 'var(--ink2)', 'font-family': 'var(--sans)' }, s, v + '%');
+    });
+    YEARS.forEach(function (yr, i) {
+      if (yr % 5 === 0) sv('text', { x: x(i), y: H - 10, 'text-anchor': 'middle', 'font-size': 11, fill: 'var(--ink2)', 'font-family': 'var(--sans)' }, s, String(yr));
+    });
+    var d = COV.map(function (v, i) { return (i ? 'L' : 'M') + x(i) + ',' + y(v); }).join('');
+    sv('path', { d: d, fill: 'none', stroke: 'var(--blue)', 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+    var lo = COV.indexOf(Math.min.apply(null, COV)), hi = COV.indexOf(Math.max.apply(null, COV));
+    [lo, hi].forEach(function (i) {
+      sv('circle', { cx: x(i), cy: y(COV[i]), r: 5, fill: 'var(--blue)', stroke: 'var(--bg)', 'stroke-width': 2 }, s);
+      var anchor = x(i) > W - 90 ? 'end' : 'middle';
+      sv('text', { x: x(i), y: i === lo ? y(COV[i]) + 20 : y(COV[i]) - 11, 'text-anchor': anchor, 'font-size': 11, fill: 'var(--ink)', 'font-family': 'var(--sans)' }, s, YEARS[i] + ': ' + f(COV[i], 1) + '%');
+    });
+    var step = (W - L - R - 16) / (YEARS.length - 1);
+    YEARS.forEach(function (yr, i) {
+      var hit = sv('rect', { x: x(i) - step / 2, y: T, width: step, height: H - B - T, fill: 'transparent' }, s);
+      hover(hit, function () { return [String(yr), 'Seats with a name: ' + f(COV[i], 1) + '%', comma(VOTES[i]) + ' votes']; });
+    });
+  }
+
+  fit($('#hm'), heat);
+  htable();
+  seg($('#vsel'), VOTE.map(function (v) { return 'Vote ' + v.id; }), 0, function (i) { vi = i; seats(); });
+  seg($('#vview'), ['Counts on the vote page', 'Names in the CSV'], 1, function (i) { view = i; seats(); });
+  fit($('#sm'), seats);
+  cats();
+  fit($('#cv'), cover);
+})();
+</script>
+</body>
+</html>

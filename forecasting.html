@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales forecasting with a neural network | Muhammad Huzaifa Shafique</title>
+<meta name="description" content="A scikit-learn neural network (MLPRegressor) that forecasts monthly sales for ten items, tested against four baselines on 12 unseen months. Interactive model comparison with MAE, RMSE, WAPE and bias, plus the limits.">
+<meta name="author" content="Muhammad Huzaifa Shafique">
+<meta name="robots" content="index,follow,max-snippet:-1">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/forecasting.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sales forecasting with a neural network">
+<meta property="og:description" content="Five model versions and four baselines on 12 unseen months, with the rejected variant left in the results.">
+<meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/forecasting.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23191919'/%3E%3Crect x='6' y='7' width='20' height='5' rx='1.5' fill='%23aab2bc'/%3E%3Crect x='6' y='14' width='15' height='5' rx='1.5' fill='%23aab2bc'/%3E%3Crect x='6' y='21' width='10' height='5' rx='1.5' fill='%23338ced'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<style>
+.hb{grid-template-columns:minmax(0,16rem) minmax(0,1fr) 3.6rem}
+.hb.n .b i{background:var(--blue)}
+.hb .b{position:relative}
+.hb .b u{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--ink);text-decoration:none}
+.gh{font:600 .78rem var(--sans);color:var(--ink2);margin:1rem 0 .1rem}
+.lg .x i{background:transparent;box-shadow:inset 0 0 0 2px var(--blue)}
+.lg .k i{border-radius:0;width:2px;height:11px;background:var(--ink);margin:0 .5rem 0 .2rem}
+@media (max-width:860px){.hb{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) 3.2rem}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Sales forecasting with a neural network","url":"https://muhammad-huzaifa-shafique.github.io/forecasting.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Time-series forecasting","Neural networks","Feature engineering","Model evaluation","Baselines"],"keywords":"time-series forecasting, neural network, MLPRegressor, scikit-learn, feature engineering, lag features, rolling features, WAPE, MAE, RMSE, bias, baselines, hold-out evaluation, ensemble","isBasedOn":{"@type":"SoftwareSourceCode","name":"Sales-Forecasting-Neural-Network","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+<a class="mark" href="./">Muhammad Huzaifa Shafique</a>
+<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+</div></header>
+<main id="main"><div class="wrap">
+
+<section class="hero sm" aria-labelledby="h1">
+<p class="crumb"><a href="./#projects">Main projects</a> / Sales forecasting</p>
+<h1 id="h1" style="max-width:24ch">Sales forecasting with a neural network</h1>
+<p class="lede">A scikit-learn neural network that forecasts monthly sales for ten items from 2019 to 2024 order history. The sales data belongs to a company and stays private, so the repository holds the code and the error figures. I built it as a quiz project for a graduate course.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network">Source code</a><a href="#compare">Jump to the comparison</a></p>
+<p class="rel"><b>Relevant to:</b> time-series forecasting, feature engineering (lags, rolling statistics, seasonality), neural networks (scikit-learn MLPRegressor), ensembles, model evaluation against baselines (MAE, RMSE, WAPE, bias), leakage control, honest reporting.</p>
+</section>
+
+<section class="sec" aria-labelledby="h-q"><div class="row"><h2 id="h-q">The problem</h2><div class="body">
+<p>Monthly demand for a single item is lumpy, so every forecast misses by a lot. "How accurate is the model?" is the wrong question. The useful one is whether it beats the simple rules a planner would use anyway. So I tested every model on the last 12 months of data, which none of them saw during training, next to four baselines: repeat last month, a 3-month average, a 12-month average, and the same month last year.</p>
+<p>Two controls keep the comparison fair. Scaling statistics come from the training months only, and every forecast uses past values only, so nothing from the future leaks in.</p>
+</div></div></section>
+
+<section class="sec" id="compare" aria-labelledby="h-cmp"><div class="row"><h2 id="h-cmp">Model comparison</h2><div class="body">
+<p>Choose a metric. Grey bars are the baselines, blue bars are my neural-network versions in the order I tried them, and the outlined bar is the variant I rejected. The black tick marks the best baseline.</p>
+<div class="bench">
+<header><h3>Forecast error on 12 unseen months</h3><div class="seg" id="metric" role="group" aria-label="Metric"></div></header>
+<div id="bars"></div>
+<div class="lg"><span><i></i>Baseline</span><span class="b"><i></i>Neural-network version</span><span class="x"><i></i>Rejected variant</span><span class="k"><i></i>Best baseline</span></div>
+<p class="out" id="sum" aria-live="polite"></p>
+</div>
+
+<div class="bench">
+<header><h3>The five versions, in the order I tried them</h3></header>
+<div id="path"></div>
+<p class="out" id="pathsum" aria-live="polite"></p>
+</div>
+
+<details><summary>Show all numbers as a table</summary>
+<div class="scroll"><table class="t">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">Test period October 2023 to September 2024. MAE and RMSE are in units per item per month. WAPE is total absolute error divided by total actual sales, in percent. Bias is the total forecast minus the total actual, in percent of actual.</caption>
+<thead><tr><th scope="col">Model</th><th scope="col" class="n">MAE</th><th scope="col" class="n">RMSE</th><th scope="col" class="n">WAPE %</th><th scope="col" class="n">Bias %</th><th scope="col" class="n">WAPE % without bulk-order month</th><th scope="col" class="n">Bias % without bulk-order month</th></tr></thead>
+<tbody>
+<tr><td>Naive (last month)</td><td class="n">25.16</td><td class="n">56.58</td><td class="n">119.75</td><td class="n">4.56</td><td class="n">132.86</td><td class="n">65.51</td></tr>
+<tr><td>3-month moving average</td><td class="n">23.56</td><td class="n">45.74</td><td class="n">112.14</td><td class="n">7.39</td><td class="n">121.36</td><td class="n">71.81</td></tr>
+<tr><td>12-month moving average</td><td class="n">21.42</td><td class="n">41.17</td><td class="n">101.97</td><td class="n">6.02</td><td class="n">106.34</td><td class="n">71.25</td></tr>
+<tr><td>Seasonal naive (same month last year)</td><td class="n">18.82</td><td class="n">42.38</td><td class="n">89.57</td><td class="n">-25.70</td><td class="n">91.87</td><td class="n">16.87</td></tr>
+<tr><td>NN v1: one network per item, raw scale</td><td class="n">23.27</td><td class="n">43.71</td><td class="n">110.76</td><td class="n">1.02</td><td class="n">121.17</td><td class="n">58.82</td></tr>
+<tr><td>NN v2: one pooled network, per-item scaling</td><td class="n">17.89</td><td class="n">41.85</td><td class="n">85.15</td><td class="n">-29.30</td><td class="n">75.23</td><td class="n">8.96</td></tr>
+<tr><td>NN v3: log transform, seasonality and rolling features</td><td class="n">17.05</td><td class="n">40.81</td><td class="n">81.14</td><td class="n">-37.68</td><td class="n">70.47</td><td class="n">-4.20</td></tr>
+<tr><td><b>NN v4 (final): smaller network, 10-seed ensemble</b></td><td class="n"><b>16.53</b></td><td class="n"><b>40.24</b></td><td class="n"><b>78.69</b></td><td class="n"><b>-37.05</b></td><td class="n"><b>66.67</b></td><td class="n"><b>-1.46</b></td></tr>
+<tr><td>NN v5 (rejected): log-normal bias correction</td><td class="n">17.39</td><td class="n">39.87</td><td class="n">82.76</td><td class="n">-11.14</td><td class="n">71.04</td><td class="n">38.40</td></tr>
+</tbody></table></div></details>
+
+<h3 style="margin-top:1.8rem">What the comparison supports</h3>
+<ul>
+<li>The final model (v4) beats all four baselines on MAE, RMSE and WAPE. Its MAE and WAPE are about 12% lower than the best baseline, the seasonal naive forecast.</li>
+<li>One bulk order in November 2023, about seven times a normal month, is real demand, so it stays in the data, but no model could predict it. Without that month, the final model's WAPE is 66.7% against 91.9% for the best baseline, about 27% lower.</li>
+<li>Against the best baseline, the final model has the lower WAPE on 6 of the 10 items over the full year, and on 8 of 10 without the bulk-order month.</li>
+<li>Metric choice matters. On RMSE, version 5 is the lowest (39.87), but it raised MAE and WAPE and over-forecast by 38% without the bulk-order month, so I rejected it.</li>
+</ul>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-how"><div class="row"><h2 id="h-how">How it works</h2><div class="body">
+<ol class="steps">
+<li><span><b>Load and clean.</b> Reads the order lines from Excel, trims text fields and drops the incomplete last month, zero-quantity lines and re-issued duplicate lines. Cleaning removed 117 of 49,272 rows: 8 partial-month, 1 zero-quantity and 108 re-issued duplicates.</span></li>
+<li><span><b>Monthly series.</b> Sums the quantity per item per month for ten items that had orders in every month.</span></li>
+<li><span><b>Features.</b> Twelve monthly lags, rolling means over 3, 6 and 12 months, the rolling standard deviation, the month of the year (sine and cosine) and which item it is. Each item is scaled with training-month statistics only (log1p, then z-score).</span></li>
+<li><span><b>Models.</b> scikit-learn's <code>MLPRegressor</code> (ReLU, Adam, early stopping). Versions run from one network per item (v1) to one pooled network with log scaling and extra features (v3), and then a smaller network averaged over ten seeds (v4, final).</span></li>
+<li><span><b>Evaluation.</b> One-step-ahead forecasts for the last 12 months, using actual past values as inputs, compared with four baselines on MAE, RMSE, WAPE and bias.</span></li>
+<li><span><b>Forecast.</b> The final model is retrained on all the data and forecasts October 2024 to March 2025.</span></li>
+</ol>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-lim"><div class="row"><h2 id="h-lim">Limits</h2><div class="body">
+<ul>
+<li><b>It under-forecasts total volume.</b> The final model's bias is -37% over the full test year. Without the bulk-order month it is -1.5%, so almost all of the gap comes from that one order.</li>
+<li><b>One hold-out period and ten items.</b> The ranking of models comes from a single 12-month test, so read it as a hint, not proof. Several test windows (rolling-origin evaluation) would be a stronger test.</li>
+<li><b>Versions 1 to 3 use one random seed; versions 4 and 5 average ten.</b> So v4's gain over v3 mixes a smaller network with the ensemble.</li>
+<li><b>The six-month forecast is recursive.</b> Each prediction is fed back in as the next month's input, so errors can compound. I could not check it against real data.</li>
+</ul>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network">Source code</a><a href="./#projects">Back to all projects</a></p>
+</div></div></section>
+
+</div></main>
+<footer class="foot"><div class="wrap"><span>&copy; <span id="yr">2026</span> Muhammad Huzaifa Shafique</span><span><a href="llms.txt">Plain-text summary for AI tools (llms.txt)</a></span></div></footer>
+<script src="site.js"></script>
+<script>
+(function () {
+  var M = [
+    ['Naive (last month)', 'b', 25.16, 56.58, 119.75, 4.56, 132.86, 65.51],
+    ['3-month moving average', 'b', 23.56, 45.74, 112.14, 7.39, 121.36, 71.81],
+    ['12-month moving average', 'b', 21.42, 41.17, 101.97, 6.02, 106.34, 71.25],
+    ['Seasonal naive (same month last year)', 'b', 18.82, 42.38, 89.57, -25.7, 91.87, 16.87],
+    ['v1: one network per item, raw scale', 'n', 23.27, 43.71, 110.76, 1.02, 121.17, 58.82],
+    ['v2: one pooled network, per-item scaling', 'n', 17.89, 41.85, 85.15, -29.3, 75.23, 8.96],
+    ['v3: log transform, seasonality, rolling features', 'n', 17.05, 40.81, 81.14, -37.68, 70.47, -4.2],
+    ['v4 (final): smaller network, 10-seed ensemble', 'f', 16.53, 40.24, 78.69, -37.05, 66.67, -1.46],
+    ['v5 (rejected): log-normal bias correction', 'x', 17.39, 39.87, 82.76, -11.14, 71.04, 38.4]
+  ];
+  var METRICS = [['WAPE %', 4, 1, 'WAPE'], ['WAPE %, no bulk month', 6, 1, 'WAPE without the bulk-order month'], ['MAE', 2, 2, 'MAE'], ['RMSE', 3, 2, 'RMSE']];
+  var cur = 0;
+  function best(col) { var b = 1e9; M.forEach(function (m) { if (m[1] === 'b' && m[col] < b) b = m[col]; }); return b; }
+  function bars() {
+    var box = $('#bars'), mt = METRICS[cur], col = mt[1], dp = mt[2], bb = best(col), mx = 0;
+    M.forEach(function (m) { if (m[col] > mx) mx = m[col]; });
+    mx = Math.ceil(mx / 10) * 10 * 1.0;
+    box.textContent = '';
+    [['b', 'Baselines (simple rules)'], ['n', 'Neural-network versions']].forEach(function (g) {
+      h('div', { 'class': 'gh' }, box, g[1]);
+      M.forEach(function (m) {
+        var isB = m[1] === 'b';
+        if ((g[0] === 'b') !== isB) return;
+        var row = h('div', { 'class': 'hb ' + (m[1] === 'f' ? 'n f' : m[1] === 'n' ? 'n' : m[1] === 'x' ? 'x' : ''), tabindex: '0' }, box);
+        h('span', { 'class': 'l' }, row, m[0]);
+        var tr = h('span', { 'class': 'b' }, row);
+        h('i', { style: 'width:' + (m[col] / mx * 100) + '%' }, tr);
+        if (!isB) h('u', { style: 'left:' + (bb / mx * 100) + '%' }, tr);
+        h('span', { 'class': 'v' }, row, f(m[col], dp));
+        hover(row, function () {
+          var better = m[col] < bb;
+          return [m[0], mt[3] + ': ' + f(m[col], dp), 'Bias: ' + f(m[5], 1) + '% (without bulk-order month: ' + f(m[7], 1) + '%)', isB ? 'Baseline' : (better ? 'Beats the best baseline (' + f(bb, dp) + ')' : 'Does not beat the best baseline (' + f(bb, dp) + ')')];
+        });
+      });
+    });
+    var fin = M[7][col], pct = (bb - fin) / bb * 100;
+    $('#sum').textContent = 'On ' + mt[3] + ', the final model scores ' + f(fin, dp) + ' against ' + f(bb, dp) + ' for the best baseline, which is ' + f(pct, 0) + '% lower. Lower is better.';
+  }
+  function path() {
+    var box = $('#path'), mt = METRICS[cur], col = mt[1], dp = mt[2];
+    var V = M.slice(4), bb = best(col);
+    var beat = [], miss = [], lo1 = 0;
+    V.forEach(function (v, i) { (v[col] < bb ? beat : miss).push('v' + (i + 1)); if (v[col] < V[lo1][col]) lo1 = i; });
+    function lst(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+    var ps = 'On ' + mt[3] + ', ' + (beat.length ? lst(beat) + (beat.length > 1 ? ' beat' : ' beats') + ' the best baseline (' + f(bb, dp) + ')' : 'no version beats the best baseline (' + f(bb, dp) + ')') + (miss.length ? ', while ' + lst(miss) + (miss.length > 1 ? ' do' : ' does') + ' not' : '') + '. The lowest score is v' + (lo1 + 1) + ' at ' + f(V[lo1][col], dp) + (V[lo1][1] === 'x' ? ', the variant I rejected on the other metrics.' : '.');
+    $('#pathsum').textContent = ps;
+    fit(box, function () {
+      box.textContent = '';
+      var W = box.clientWidth || 600, H = 236, L = 40, R = 16, T = 22, B = 44;
+      var lo = Math.floor((Math.min(bb, Math.min.apply(null, V.map(function (v) { return v[col]; }))) - 8) / 10) * 10;
+      var hi = Math.ceil((Math.max(bb, Math.max.apply(null, V.map(function (v) { return v[col]; }))) + 6) / 10) * 10;
+      var y = lin(lo, hi, H - B, T), x = function (i) { return L + (W - L - R) * (i + 0.5) / V.length; };
+      var s = sv('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': mt[3] + ' for each neural-network version compared with the best baseline' }, box);
+      for (var t = lo; t <= hi; t += (hi - lo) > 60 ? 20 : 10) {
+        sv('line', { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: 'var(--rule)', 'stroke-width': 1 }, s);
+        sv('text', { x: L - 6, y: y(t) + 4, 'text-anchor': 'end', 'font-size': 11, fill: 'var(--ink2)', 'font-family': 'var(--sans)' }, s, String(t));
+      }
+      sv('line', { x1: L, x2: W - R, y1: y(bb), y2: y(bb), stroke: 'var(--ink)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4' }, s);
+      sv('text', { x: W - R, y: y(bb) - 6, 'text-anchor': 'end', 'font-size': 11, fill: 'var(--ink)', 'font-family': 'var(--sans)' }, s, 'best baseline ' + f(bb, dp));
+      var d = V.map(function (v, i) { return (i ? 'L' : 'M') + x(i) + ',' + y(v[col]); }).join('');
+      sv('path', { d: d, fill: 'none', stroke: 'var(--blue)', 'stroke-width': 2, 'stroke-linejoin': 'round' }, s);
+      V.forEach(function (v, i) {
+        var rej = v[1] === 'x', below = v[col] < bb;
+        var c = sv('circle', { cx: x(i), cy: y(v[col]), r: 5, fill: rej ? 'var(--bg)' : 'var(--blue)', stroke: rej ? 'var(--blue)' : 'var(--bg)', 'stroke-width': 2, tabindex: '0' }, s);
+        sv('text', { x: x(i), y: below ? y(v[col]) + 19 : y(v[col]) - 11, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': v[1] === 'f' ? 700 : 400, fill: 'var(--ink)', 'font-family': 'var(--sans)' }, s, f(v[col], dp));
+        sv('text', { x: x(i), y: H - 22, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': v[1] === 'f' ? 700 : 400, fill: 'var(--ink)', 'font-family': 'var(--sans)' }, s, 'v' + (i + 1));
+        if (v[1] !== 'n') sv('text', { x: x(i), y: H - 8, 'text-anchor': 'middle', 'font-size': 11, fill: 'var(--ink2)', 'font-family': 'var(--sans)' }, s, v[1] === 'f' ? 'final' : 'rejected');
+        hover(c, function () { return [v[0], mt[3] + ': ' + f(v[col], dp)]; });
+      });
+    });
+  }
+  seg($('#metric'), METRICS.map(function (m) { return m[0]; }), 0, function (i) { cur = i; bars(); path(); });
+  bars(); path();
+})();
+</script>
+</body>
+</html>

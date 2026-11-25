@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberAI: threat triage, ML pipeline and cited assistant | Muhammad Huzaifa Shafique</title>
+<meta name="description" content="A cyber-threat assistant: rule-based triage, a logistic regression and Isolation Forest pipeline with drift monitoring and a human-review queue, and an offline-first retrieval assistant. Interactive explainers, prompts and limits.">
+<meta name="author" content="Muhammad Huzaifa Shafique">
+<meta name="robots" content="index,follow,max-snippet:-1">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CyberAI: threat triage, an ML pipeline and a cited assistant">
+<meta property="og:description" content="Logistic regression, Isolation Forest, drift monitoring, a human-review queue and an offline-first retrieval assistant, explained with interactive demos.">
+<meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23191919'/%3E%3Crect x='6' y='7' width='20' height='5' rx='1.5' fill='%23aab2bc'/%3E%3Crect x='6' y='14' width='15' height='5' rx='1.5' fill='%23aab2bc'/%3E%3Crect x='6' y='21' width='10' height='5' rx='1.5' fill='%23338ced'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="site.css">
+<style>
+.ctl{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr) 3.6rem;gap:.4rem .8rem;align-items:center;font:.88rem var(--sans);margin:.4rem 0}
+.ctl output{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+input[type=range]{width:100%;accent-color:var(--blue);margin:0}
+.meter{position:relative;height:20px;background:var(--rule);border-radius:3px;margin:2rem 0 .5rem}
+.meter .z{position:absolute;top:0;bottom:0;background:var(--soft)}
+.meter .f{position:absolute;left:0;top:0;bottom:0;background:var(--blue);border-radius:3px 0 0 3px}
+.meter .t{position:absolute;top:-7px;bottom:-7px;width:2px;margin-left:-1px;background:var(--ink)}
+.meter .m{position:absolute;top:-7px;bottom:-7px;width:6px;margin-left:-3px;background:var(--ink);border-radius:3px}
+.meter .tl{position:absolute;top:-1.55rem;font:.74rem var(--sans);color:var(--ink2);transform:translateX(-50%);white-space:nowrap}
+.ends{display:flex;justify-content:space-between;font:.76rem var(--sans);color:var(--ink2)}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"CyberAI: threat triage, an ML pipeline and a cited assistant","url":"https://muhammad-huzaifa-shafique.github.io/cyberai.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Threat intelligence","Anomaly detection","Concept drift monitoring","Human-in-the-loop machine learning","Retrieval-augmented generation"],"keywords":"logistic regression, Isolation Forest, anomaly detection, drift monitoring, human-in-the-loop, TF-IDF, sentence embeddings, MiniLM, RAG, threat intelligence, SQLite, Python","isBasedOn":{"@type":"SoftwareSourceCode","name":"CyberAI","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/CyberAI"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top"><div class="wrap">
+<a class="mark" href="./">Muhammad Huzaifa Shafique</a>
+<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+</div></header>
+<main id="main"><div class="wrap">
+
+<section class="hero sm" aria-labelledby="h1">
+<p class="crumb"><a href="./#projects">Main projects</a> / CyberAI</p>
+<h1 id="h1" style="max-width:26ch">CyberAI: threat triage, an ML pipeline and a cited assistant</h1>
+<p class="lede">CyberAI is a cyber-threat assistant I built for a graduate AI course. It checks links, emails and PDFs, keeps a local cache of threat indicators, scores them with machine-learning models, and answers questions from the cache before it goes online.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code (triage tool and architecture note)</a><a href="#explainers">Jump to the explainers</a><a href="method.html">How I build with AI assistants</a></p>
+<p class="rel"><b>Relevant to:</b> classification, logistic regression, anomaly detection (Isolation Forest), drift monitoring, human-in-the-loop review, retrieval-augmented generation, TF-IDF retrieval, sentence embeddings, API integration, SQLite, Python.</p>
+</section>
+
+<section class="sec" aria-labelledby="h-what"><div class="row"><h2 id="h-what">What it is</h2><div class="body">
+<p>Three parts work together. A rule-based triage tool scores links, emails and PDFs from VirusTotal, DNS, WHOIS, blocklists, SPF, DMARC and DKIM checks, look-alike domains and phishing wording, and returns Clean, Suspicious or Malware with the reasons. An ML pipeline scores indicators in a local cache. A chat assistant answers questions from that cache and shows its evidence.</p>
+<p>Live threat feeds were hard to scrape reliably, so I seeded the cache with public cybersecurity datasets from Hugging Face as stand-ins. Together with real triage results, they make up the cache.</p>
+<div class="scroll"><table class="t">
+<caption style="text-align:left;font:.85rem var(--sans);color:var(--ink2);padding:.3rem 0">What is in the local cache of the saved project</caption>
+<tbody>
+<tr><th scope="row">Threat indicators in the cache</th><td class="n">1,758</td></tr>
+<tr><th scope="row">Stored triage results</th><td class="n">86</td></tr>
+<tr><th scope="row">Saved question-and-answer pairs</th><td class="n">25</td></tr>
+<tr><th scope="row">Training manifest (what the train command reads by default)</th><td class="n">450 records: 25 MalwareBazaar file hashes labeled malicious, 375 web pages and 50 RSS items labeled unknown</td></tr>
+<tr><th scope="row">Embedding index (manifest)</th><td class="n">20,000 rows, 384 dimensions, all-MiniLM-L6-v2, built from public phishing datasets. The chat in this version does not call it.</td></tr>
+</tbody></table></div>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-pipe"><div class="row"><h2 id="h-pipe">The pipeline</h2><div class="body">
+<ol class="steps">
+<li><span><b>Ingest.</b> Connectors write indicators (URLs, domains, text) into a local SQLite cache.</span></li>
+<li><span><b>Features.</b> Numeric features from each record, plus a bag of words over its text limited to the 300 most frequent words.</span></li>
+<li><span><b>Score.</b> Logistic regression returns the probability that an indicator is malicious.</span></li>
+<li><span><b>Outliers.</b> An Isolation Forest (contamination 0.05, so about 5% of training points count as outliers) returns an anomaly score.</span></li>
+<li><span><b>Risk.</b> An elastic-net regression predicts a 0 to 1 risk score. Its target is each record's severity field divided by 10.</span></li>
+<li><span><b>Drift.</b> For each numeric feature, the monitor measures how far the new batch's mean moved from the baseline mean, in baseline standard deviations. It averages these and alerts above 0.25.</span></li>
+<li><span><b>Review.</b> Any score within 0.15 of 0.5 goes to a SQLite review queue, so a person decides the cases the model is least sure about.</span></li>
+</ol>
+</div></div></section>
+
+<section class="sec" id="explainers" aria-labelledby="h-ex"><div class="row"><h2 id="h-ex">Explainers</h2><div class="body">
+<p>Each demo applies a rule from the code. The inputs are yours to move; they are not model outputs.</p>
+
+<div class="bench">
+<header><h3>Review queue: which scores go to a person</h3></header>
+<div class="ctl"><label for="p">Probability malicious</label><input id="p" type="range" min="0" max="1" step="0.01" value="0.52"><output id="p-o" for="p">0.52</output></div>
+<div class="meter" aria-hidden="true"><span class="z" style="left:35%;width:30%"></span><span class="tl" style="left:35%">0.35</span><span class="tl" style="left:65%">0.65</span><span class="m" id="p-m" style="left:52%"></span></div>
+<div class="ends"><span>0 benign</span><span>1 malicious</span></div>
+<p class="out" id="p-r" aria-live="polite"></p>
+<p class="sub" style="margin-bottom:0">Rule in <code>ScoringPipeline.score</code>: <code>abs(prob - 0.5) &lt; 0.15</code> puts the record in the review queue.</p>
+</div>
+
+<div class="bench">
+<header><h3>Drift monitor: has the new batch moved?</h3></header>
+<div class="ctl"><label for="d1">Feature A</label><input id="d1" type="range" min="-1" max="1" step="0.05" value="0.1"><output id="d1-o" for="d1">+0.10</output></div>
+<div class="ctl"><label for="d2">Feature B</label><input id="d2" type="range" min="-1" max="1" step="0.05" value="0.3"><output id="d2-o" for="d2">+0.30</output></div>
+<div class="ctl"><label for="d3">Feature C</label><input id="d3" type="range" min="-1" max="1" step="0.05" value="-0.2"><output id="d3-o" for="d3">-0.20</output></div>
+<div class="meter" aria-hidden="true"><span class="f" id="d-f" style="width:20%"></span><span class="t" style="left:25%"></span><span class="tl" style="left:25%">alert above 0.25</span></div>
+<div class="ends"><span>0 no drift</span><span>1 baseline standard deviation</span></div>
+<p class="out" id="d-r" aria-live="polite"></p>
+<p class="sub" style="margin-bottom:0">Each slider is how far a feature's batch mean moved from its baseline mean, in baseline standard deviations. The real monitor averages the absolute shift over every numeric feature, and these three stand in for them.</p>
+</div>
+
+<div class="bench">
+<header><h3>Assistant: when it answers from the local cache</h3></header>
+<div class="ctl"><label for="g">Best cache match</label><input id="g" type="range" min="0" max="1" step="0.01" value="0.3"><output id="g-o" for="g">0.30</output></div>
+<div class="meter" aria-hidden="true"><span class="z" style="left:18%;width:82%"></span><span class="t" style="left:18%"></span><span class="tl" style="left:18%">0.18</span><span class="m" id="g-m" style="left:30%"></span></div>
+<div class="ends"><span>0 unrelated</span><span>1 identical</span></div>
+<p class="out" id="g-r" aria-live="polite"></p>
+<p class="sub" style="margin-bottom:0">Settings in <code>CyberAI_chat.py</code>: <code>MIN_SIM = 0.18</code>, <code>MIN_DOCS = 1</code>, <code>TOP_K = 4</code>. The similarity is TF-IDF cosine similarity.</p>
+</div>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-asst"><div class="row"><h2 id="h-asst">The assistant</h2><div class="body">
+<p>The chat assistant is offline-first. If a message contains a URL, a file or an email, it runs the triage tool. Otherwise it searches the local cache with TF-IDF. Code that loads a MiniLM embedding index is in the file, but this version of the chat does not call it. It shows the answer, why it answered that way, and the evidence passages, and it appends each exchange to a chat log that the search ignores. Separately, it saves question-and-answer pairs back into the cache (the 25 pairs above: 18 triage write-ups and 7 whose saved answer is the word None), and later questions can find them. The code calls this self-training. Nothing is trained: the assistant's earlier answers become searchable evidence, so a wrong answer can come back as evidence too.</p>
+<p>When an LLM is configured (Ollama with llama3 by default, or an OpenAI model) it writes the answer text, at temperature 0.3, from the evidence passages. These are the two prompts, as the code builds them.</p>
+<pre>You are a cybersecurity assistant. Write a clear, factual, structured answer.
+Cite evidence inline with bracketed numbers [1], [2], ... referring to the sources below.
+Do NOT invent facts not supported by the sources. If sources are weak or off-topic, say so briefly.
+Give a thorough, multi-paragraph explanation with bullets where helpful.
+
+Question: the question
+
+Sources (use these for citations):
+[1] path :: first 600 characters of the passage
+[2] path :: first 600 characters of the passage
+
+Now write the answer with inline citations like [1], [2], then stop.</pre>
+<pre>You are a SOC analyst. Write 4-6 concise sentences summarizing this URL triage. State overall risk, why, and concrete next steps for IR.
+URL: the URL
+TRIAGE JSON:
+the triage result as JSON</pre>
+<p>Both prompts give the model the facts it should use (the evidence list, the triage result) and say what shape the answer takes. The first one also tells the model what to do when the evidence is weak.</p>
+</div></div></section>
+
+<section class="sec" aria-labelledby="h-lim"><div class="row"><h2 id="h-lim">Limits</h2><div class="body">
+<ul>
+<li>I have not measured accuracy. The code has a hold-out evaluation command (a random 80/20 split), but the saved project has no model file and no evaluation output. The saved training manifest also could not support a meaningful test: its 25 malicious records are all file hashes, and its other 425 records are web and RSS text labeled unknown, which the training code counts as benign. A classifier could tell those two groups apart without learning anything about threats. So nothing on this page describes how well it classifies, and the numbers describe the design and the size of the cache.</li>
+<li>The triage point values are set by hand, not learned from data.</li>
+<li>The review queue in the saved project is empty, so it has not been exercised on stored data.</li>
+<li>The optional "LLM reasoner" inside the pipeline is a placeholder: it redacts email addresses and key-like strings, then uses keyword rules. The assistant is the part that calls a real LLM.</li>
+<li>The public datasets stand in for live feeds, so the cache is not real-time threat intelligence.</li>
+<li>The source of the pipeline and the assistant is not published yet. The repository holds the triage tool and an architecture note with code excerpts.</li>
+</ul>
+<p>Next step: train on a labeled public phishing dataset with a held-out split, report precision and recall, and compare against the hand-set score.</p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code</a><a href="./#projects">Back to all projects</a></p>
+</div></div></section>
+
+</div></main>
+<footer class="foot"><div class="wrap"><span>&copy; <span id="yr">2026</span> Muhammad Huzaifa Shafique</span><span><a href="llms.txt">Plain-text summary for AI tools (llms.txt)</a></span></div></footer>
+<script src="site.js"></script>
+<script>
+(function () {
+  var p = $('#p'), pm = $('#p-m'), pr = $('#p-r');
+  function upP() {
+    var v = +p.value, d = Math.abs(v - 0.5), q = d < 0.15;
+    $('#p-o').textContent = v.toFixed(2);
+    pm.style.left = (v * 100) + '%';
+    pr.textContent = '|p - 0.5| = ' + d.toFixed(2) + (q
+      ? ', which is less than 0.15, so the record goes to the review queue for a person to decide.'
+      : ', which is not less than 0.15, so the score stands as ' + (v < 0.5 ? 'likely benign' : 'likely malicious') + ' and the record is not queued.');
+  }
+  p.addEventListener('input', upP); upP();
+
+  var ds = [$('#d1'), $('#d2'), $('#d3')], dr = $('#d-r');
+  function upD() {
+    var s = 0;
+    ds.forEach(function (x) {
+      var v = +x.value;
+      $('#' + x.id + '-o').textContent = (v > 0 ? '+' : '') + v.toFixed(2);
+      s += Math.abs(v);
+    });
+    s /= ds.length;
+    $('#d-f').style.width = Math.min(100, s * 100) + '%';
+    dr.textContent = 'Average shift ' + s.toFixed(2) + (s > 0.25 ? ' is above 0.25, so the monitor raises a drift alert.' : ' is not above 0.25, so there is no alert.');
+  }
+  ds.forEach(function (x) { x.addEventListener('input', upD); }); upD();
+
+  var g = $('#g'), gm = $('#g-m'), gr = $('#g-r');
+  function upG() {
+    var v = +g.value;
+    $('#g-o').textContent = v.toFixed(2);
+    gm.style.left = (v * 100) + '%';
+    gr.textContent = v >= 0.18
+      ? 'Best match ' + v.toFixed(2) + ' is at least 0.18, so the assistant answers from the local cache and lists up to 4 passages as evidence. No internet access is needed.'
+      : 'Best match ' + v.toFixed(2) + ' is below 0.18, so the cache is too weak. The assistant tries a live lookup, adds what it finds to the cache, searches again, and answers only if the new best match reaches 0.18. Otherwise it says it does not have enough relevant material.';
+  }
+  g.addEventListener('input', upG); upG();
+})();
+</script>
+</body>
+</html>
