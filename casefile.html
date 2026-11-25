@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Casefile: a local RAG system with embedding comparison and citation checking | Muhammad Huzaifa Shafique</title>
+<title>Casefile: Local RAG System with embedding comparison and citation checking | Muhammad Huzaifa Shafique</title>
 <meta name="description" content="A local retrieval-augmented generation (RAG) system: three embedding setups compared on the same 22,720 chunks in Chroma, Llama 3.1 8B served by Ollama, a five-rule system prompt and a citation checker with 58 unit tests. Penetration-testing documentation is the test corpus. Interactive retrieval bench and limits.">
 <meta name="author" content="Muhammad Huzaifa Shafique">
 <meta name="robots" content="index,follow,max-snippet:-1">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#080b13">
 <link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/casefile.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Casefile: a local RAG system that cites its sources">
+<meta property="og:title" content="Casefile: Local RAG System">
 <meta property="og:description" content="Three embedding setups compared on the same 22,720 chunks, a system prompt with five rules and a citation checker with 58 unit tests. Penetration-testing documentation is the test corpus.">
 <meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/casefile.html">
 <meta name="twitter:card" content="summary">
@@ -33,22 +33,22 @@
 @media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Casefile: a local RAG system that cites its sources","url":"https://muhammad-huzaifa-shafique.github.io/casefile.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Retrieval-augmented generation","Embeddings","Vector search","Prompt engineering","Citation checking","Local LLMs","Software testing"],"keywords":"RAG, retrieval-augmented generation, embeddings, embedding model comparison, vector database, Chroma, semantic search, Ollama, Llama 3.1, LLM, prompt engineering, grounding, citation checking, hallucination checks, nomic-embed-text, all-minilm, evaluation, unit testing, Python","isBasedOn":{"@type":"SoftwareSourceCode","name":"Casefile","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Penetration_Testing"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Casefile: Local RAG System","url":"https://muhammad-huzaifa-shafique.github.io/casefile.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Retrieval-augmented generation","Embeddings","Vector search","Prompt engineering","Citation checking","Local LLMs","Software testing"],"keywords":"RAG, retrieval-augmented generation, embeddings, embedding model comparison, vector database, Chroma, semantic search, Ollama, Llama 3.1, LLM, prompt engineering, grounding, citation checking, hallucination checks, nomic-embed-text, all-minilm, evaluation, unit testing, Python","isBasedOn":{"@type":"SoftwareSourceCode","name":"Casefile-Local-RAG-System","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Casefile-Local-RAG-System"}}
 </script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
 <a class="mark" href="./">Muhammad Huzaifa Shafique</a>
-<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="Muhammad_Huzaifa_Shafique_CV.pdf">CV</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
 </div></header>
 <main id="main"><div class="wrap">
 
 <section class="hero sm" aria-labelledby="h1">
 <p class="crumb"><a href="./#projects">Main projects</a> / Casefile</p>
-<h1 id="h1" style="max-width:26ch">Casefile: a local RAG system that shows its sources</h1>
+<h1 id="h1" style="max-width:26ch">Casefile: Local RAG System</h1>
 <p class="lede">Casefile is a local retrieval-augmented generation (RAG) system. It answers questions from a document collection and shows which passages each answer came from. The collection is public penetration-testing documentation (the HackTricks wiki and tool manual pages), a good test corpus because an invented command flag can be checked against the text. Everything runs on my own computer: Ollama serves Llama 3.1 8B and the vectors live in a Chroma database.</p>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Penetration_Testing">Source code</a><a href="#bench">Jump to the retrieval bench</a><a href="method.html">How I build with AI assistants</a></p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Casefile-Local-RAG-System">Source code</a><a href="#bench">Jump to the retrieval bench</a><a href="method.html">How I build with AI assistants</a></p>
 <p class="rel"><b>Relevant to:</b> retrieval-augmented generation (RAG), embeddings, embedding-model comparison, vector search (Chroma), semantic search, local LLMs (Ollama, Llama 3.1), prompt engineering, grounding and citation checking, hallucination checks, evaluation, unit testing, Python.</p>
 </section>
 
@@ -69,7 +69,7 @@
 </div></div></section>
 
 <section class="sec" id="bench" aria-labelledby="h-bench"><div class="row"><h2 id="h-bench">Retrieval bench</h2><div class="body">
-<p>Pick a question. Each column is what one embedding setup retrieved for it, with the cosine similarity as a bar. Shaded rows were retrieved by all three setups. The data is the saved output of my comparison script (<a href="https://github.com/Muhammad-Huzaifa-Shafique/Penetration_Testing/blob/main/week5_compare_3way.txt">week5_compare_3way.txt</a>).</p>
+<p>Pick a question. Each column is what one embedding setup retrieved for it, with the cosine similarity as a bar. Shaded rows were retrieved by all three setups. The data is the saved output of my comparison script (<a href="https://github.com/Muhammad-Huzaifa-Shafique/Casefile-Local-RAG-System/blob/main/week5_compare_3way.txt">week5_compare_3way.txt</a>).</p>
 <div class="bench">
 <header><h3>Seven test questions, three embedding setups</h3></header>
 <div class="qs" id="qs" role="group" aria-label="Test question"></div>
@@ -158,7 +158,7 @@ Answer using only the passages above, and cite them like [1].</pre>
 <li>I have not measured answer quality end to end. The retrieval comparison and the checker are the evidence so far.</li>
 <li>The corpus is two public sources, and the model is a small local one. Casefile is meant for authorized labs, CTFs and coursework.</li>
 </ul>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Penetration_Testing">Source code</a><a href="./#projects">Back to all projects</a></p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Casefile-Local-RAG-System">Source code</a><a href="./#projects">Back to all projects</a></p>
 </div></div></section>
 
 </div></main>

@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CyberAI: ML pipeline, drift monitoring and a cited retrieval assistant | Muhammad Huzaifa Shafique</title>
+<title>CyberAI: Threat Triage ML Pipeline with drift monitoring and a cited retrieval assistant | Muhammad Huzaifa Shafique</title>
 <meta name="description" content="An applied machine-learning project: a rule-based baseline that runs live in your browser, a scikit-learn pipeline (logistic regression, Isolation Forest, elastic net) with drift monitoring and a human-review queue, and a retrieval assistant that cites its evidence. Cyber-threat triage is the test domain. Limits stated.">
 <meta name="author" content="Muhammad Huzaifa Shafique">
 <meta name="robots" content="index,follow,max-snippet:-1">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#080b13">
 <link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CyberAI: an ML pipeline with human review and a cited retrieval assistant">
+<meta property="og:title" content="CyberAI: Threat Triage ML Pipeline">
 <meta property="og:description" content="Run the rule-based baseline in your browser, then see the scikit-learn pipeline, drift monitor, review queue and retrieval assistant behind it. The browser version is tested against the Python code on 28,600 cases. Limits stated.">
 <meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/cyberai.html">
 <meta name="twitter:card" content="summary">
@@ -59,22 +59,22 @@ ul.why .d{display:block;margin-top:.15rem;font-size:.84rem;color:var(--mute)}
 @media (max-width:560px){.scale{max-width:none}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"CyberAI: an ML pipeline with human review and a cited retrieval assistant","url":"https://muhammad-huzaifa-shafique.github.io/cyberai.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Machine learning pipelines","Anomaly detection","Concept drift monitoring","Human-in-the-loop machine learning","Retrieval-augmented generation","Software testing"],"keywords":"machine learning pipeline, scikit-learn, logistic regression, Isolation Forest, elastic net, anomaly detection, drift monitoring, human-in-the-loop, retrieval-augmented generation, TF-IDF, sentence embeddings, MiniLM, LLM, Ollama, prompt design, regression testing, SQLite, Python, JavaScript","isBasedOn":{"@type":"SoftwareSourceCode","name":"CyberAI","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/CyberAI"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"CyberAI: Threat Triage ML Pipeline","url":"https://muhammad-huzaifa-shafique.github.io/cyberai.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Machine learning pipelines","Anomaly detection","Concept drift monitoring","Human-in-the-loop machine learning","Retrieval-augmented generation","Software testing"],"keywords":"machine learning pipeline, scikit-learn, logistic regression, Isolation Forest, elastic net, anomaly detection, drift monitoring, human-in-the-loop, retrieval-augmented generation, TF-IDF, sentence embeddings, MiniLM, LLM, Ollama, prompt design, regression testing, SQLite, Python, JavaScript","isBasedOn":{"@type":"SoftwareSourceCode","name":"CyberAI-Threat-Triage-ML-Pipeline","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/CyberAI-Threat-Triage-ML-Pipeline"}}
 </script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
 <a class="mark" href="./">Muhammad Huzaifa Shafique</a>
-<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="Muhammad_Huzaifa_Shafique_CV.pdf">CV</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
 </div></header>
 <main id="main"><div class="wrap">
 
 <section class="hero sm" aria-labelledby="h1">
 <p class="crumb"><a href="./#projects">Main projects</a> / CyberAI</p>
-<h1 id="h1" style="max-width:26ch">CyberAI: an ML pipeline with human review and a cited assistant</h1>
+<h1 id="h1" style="max-width:26ch">CyberAI: Threat Triage ML Pipeline</h1>
 <p class="lede">An applied machine-learning project from a graduate AI course: a scikit-learn scoring pipeline with drift monitoring and a human-review queue, a retrieval assistant that cites its evidence, and a rule-based baseline you can run on this page. Cyber-threat triage is the test domain.</p>
-<p class="links"><a href="#try">Try the baseline live</a><a href="#explainers">Jump to the explainers</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code (triage tool and architecture note)</a><a href="method.html">How I build with AI assistants</a></p>
+<p class="links"><a href="#try">Try the baseline live</a><a href="#explainers">Jump to the explainers</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI-Threat-Triage-ML-Pipeline">Source code (triage tool and architecture note)</a><a href="method.html">How I build with AI assistants</a></p>
 <p class="rel"><b>Relevant to:</b> machine-learning pipelines, scikit-learn, logistic regression, anomaly detection (Isolation Forest), elastic-net regression, drift monitoring, human-in-the-loop review, retrieval-augmented generation (RAG), TF-IDF retrieval, sentence embeddings, LLM integration (Ollama, OpenAI), prompt design, regression testing, Python, JavaScript, SQLite.</p>
 </section>
 
@@ -224,7 +224,7 @@ the triage result as JSON</pre>
 <li>The source of the pipeline and the assistant is not published yet. The repository holds the triage tool and an architecture note with code excerpts.</li>
 </ul>
 <p>Next step: train on a labeled public phishing dataset with a held-out split, report precision and recall, and compare against the hand-set score.</p>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI">Source code</a><a href="./#projects">Back to all projects</a></p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/CyberAI-Threat-Triage-ML-Pipeline">Source code</a><a href="./#projects">Back to all projects</a></p>
 </div></div></section>
 
 </div></main>

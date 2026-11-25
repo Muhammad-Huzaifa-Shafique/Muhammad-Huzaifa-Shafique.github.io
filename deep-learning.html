@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Neural networks from NumPy to Keras CNNs: interactive walkthrough | Muhammad Huzaifa Shafique</title>
+<title>Neural Networks: From Scratch to CNNs, an interactive walkthrough | Muhammad Huzaifa Shafique</title>
 <meta name="description" content="Interactive walkthrough of four neural-network assignments: backpropagation written in NumPy, ten Keras experiments on California housing prices, and ten CNN variations on CIFAR-10, with the recorded numbers and the limits.">
 <meta name="author" content="Muhammad Huzaifa Shafique">
 <meta name="robots" content="index,follow,max-snippet:-1">
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#080b13">
 <link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/deep-learning.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Neural networks from NumPy to Keras CNNs">
+<meta property="og:title" content="Neural Networks: From Scratch to CNNs">
 <meta property="og:description" content="Scrub through backpropagation training, step through ten Keras experiments and compare ten CNN variations, each with its limits.">
 <meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/deep-learning.html">
 <meta name="twitter:card" content="summary">
@@ -54,22 +54,22 @@
 @media (max-width:640px){.ab{grid-template-columns:minmax(0,7.2rem) minmax(0,1fr) 5.9rem;padding:.38rem .35rem}.stepnav{display:grid;grid-template-columns:1fr 1fr}.stepnav .seg{grid-column:1/-1;order:3;display:flex}.stepnav .seg button{flex:1 1 2.2rem;padding:.4rem .2rem;text-align:center}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Neural networks from NumPy to Keras CNNs","url":"https://muhammad-huzaifa-shafique.github.io/deep-learning.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Neural networks","Backpropagation","Gradient descent","Regression","Convolutional neural networks","Hyperparameter experiments"],"keywords":"neural networks, backpropagation, gradient descent, NumPy, Keras, TensorFlow, California housing, MAPE, early stopping, dropout, batch normalization, CNN, CIFAR-10, data augmentation, overfitting","isBasedOn":{"@type":"SoftwareSourceCode","name":"Neural-Networks-Coursework","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Neural Networks: From Scratch to CNNs","url":"https://muhammad-huzaifa-shafique.github.io/deep-learning.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Neural networks","Backpropagation","Gradient descent","Regression","Convolutional neural networks","Hyperparameter experiments"],"keywords":"neural networks, backpropagation, gradient descent, NumPy, Keras, TensorFlow, California housing, MAPE, early stopping, dropout, batch normalization, CNN, CIFAR-10, data augmentation, overfitting","isBasedOn":{"@type":"SoftwareSourceCode","name":"Neural-Networks-From-Scratch-to-CNNs","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-From-Scratch-to-CNNs"}}
 </script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
 <a class="mark" href="./">Muhammad Huzaifa Shafique</a>
-<nav aria-label="Main"><a href="./#projects">Projects</a><a href="deep-learning.html" aria-current="page">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+<nav aria-label="Main"><a href="./#projects">Projects</a><a href="deep-learning.html" aria-current="page">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="Muhammad_Huzaifa_Shafique_CV.pdf">CV</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
 </div></header>
 <main id="main"><div class="wrap">
 
 <section class="hero sm" aria-labelledby="h1">
-<p class="crumb"><a href="./#deeplearning">Deep-learning coursework</a> / Neural networks</p>
-<h1 id="h1" style="max-width:24ch">Neural networks, from a NumPy forward pass to Keras CNNs</h1>
+<p class="crumb"><a href="./#deeplearning">Deep learning</a> / Neural Networks: From Scratch to CNNs</p>
+<h1 id="h1" style="max-width:24ch">Neural Networks: From Scratch to CNNs</h1>
 <p class="lede">Four graduate assignments that build one idea up. I wrote the forward and backward pass by hand in NumPy, then ran ten one-change experiments on California housing prices and ten convolutional-network variations on CIFAR-10. Every chart on this page is drawn from the recorded numbers, and each section says what they do not show.</p>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework">Source code and notes</a><a href="#backprop">Backpropagation</a><a href="#housing">Housing experiments</a><a href="#cifar">CNN variations</a></p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-From-Scratch-to-CNNs">Source code and notes</a><a href="#backprop">Backpropagation</a><a href="#housing">Housing experiments</a><a href="#cifar">CNN variations</a></p>
 <p class="rel"><b>Relevant to:</b> neural networks, backpropagation, gradient descent, regression, mean absolute percentage error (MAPE), early stopping, dropout, batch normalization, convolutional neural networks (CNN), image classification, data augmentation, overfitting, hyperparameter experiments, NumPy, Keras, TensorFlow.</p>
 </section>
 
@@ -276,7 +276,7 @@
 <li><b>Source of the numbers.</b> The Keras numbers are copied from the reports I submitted with those assignments, not re-run for this page. The script that ran the ten CNN variations is not in the repository; the best model's script is.</li>
 <li><b>Scope.</b> These are course exercises on standard datasets, not production models.</li>
 </ul>
-<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework">Source code, scripts and notes</a><a href="./#deeplearning">Back to projects</a></p>
+<p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-From-Scratch-to-CNNs">Source code, scripts and notes</a><a href="./#deeplearning">Back to projects</a></p>
 </div></div></section>
 
 </div></main>

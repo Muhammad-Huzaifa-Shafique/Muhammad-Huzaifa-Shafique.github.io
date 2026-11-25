@@ -5,11 +5,11 @@ The source of [muhammad-huzaifa-shafique.github.io](https://muhammad-huzaifa-sha
 ## Pages
 
 - [index.html](index.html): home page, with the four main projects first
-- [casefile.html](casefile.html): Casefile, a local retrieval-augmented generation (RAG) system that cites its sources
-- [cyberai.html](cyberai.html): CyberAI, an ML pipeline with drift monitoring and human review, a cited retrieval assistant, and a rule-based baseline that runs live in the browser
-- [forecasting.html](forecasting.html): monthly sales forecasting with a neural network, compared against four baselines
-- [dashboard.html](dashboard.html): Gapminder dashboard on life expectancy and income, 1952 to 2007
-- [deep-learning.html](deep-learning.html): four neural-network assignments, from backpropagation in NumPy to Keras CNNs; scrub through training and step through the experiments. The code is in [Neural-Networks-Coursework](https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-Coursework)
+- [casefile.html](casefile.html): Casefile: Local RAG System, a local retrieval-augmented generation (RAG) system that cites its sources
+- [cyberai.html](cyberai.html): CyberAI: Threat Triage ML Pipeline, with drift monitoring and human review, a cited retrieval assistant, and a rule-based baseline that runs live in the browser
+- [forecasting.html](forecasting.html): Sales Forecasting Neural Network, monthly sales forecasts compared against four baselines
+- [dashboard.html](dashboard.html): Gapminder Interactive Dashboard on life expectancy and income, 1952 to 2007
+- [deep-learning.html](deep-learning.html): Neural Networks: From Scratch to CNNs, four neural-network assignments, from backpropagation in NumPy to Keras CNNs; scrub through training and step through the experiments. The code is in [Neural-Networks-From-Scratch-to-CNNs](https://github.com/Muhammad-Huzaifa-Shafique/Neural-Networks-From-Scratch-to-CNNs)
 - [data-engineering.html](data-engineering.html): the vote extractor and the fixed-width extractor, with output checks
 - [method.html](method.html): how I use AI assistants, with the real prompts and my checks
 
@@ -19,6 +19,7 @@ The source of [muhammad-huzaifa-shafique.github.io](https://muhammad-huzaifa-sha
 - [casefile-data.json](casefile-data.json), [gapminder-data.json](gapminder-data.json) and [nn-data.json](nn-data.json): data the explainers load
 - [cyberai-triage.js](cyberai-triage.js) and [cyberai-suffixes.json](cyberai-suffixes.json): the browser version of the CyberAI triage rules, and the Public Suffix List snapshot it needs
 - [tests/cyberai-parity](tests/cyberai-parity): scripts that compare that port with the real Python code (see its README)
+- [Muhammad_Huzaifa_Shafique_CV.pdf](Muhammad_Huzaifa_Shafique_CV.pdf): my CV as a PDF. It is the public copy: contact is through LinkedIn, with no phone number or email
 - [llms.txt](llms.txt): a plain-text summary for AI tools
 - [sitemap.xml](sitemap.xml) and [robots.txt](robots.txt)
 

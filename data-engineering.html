@@ -44,15 +44,15 @@ pre.smp{font-size:.78rem;line-height:1.45}
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
 <a class="mark" href="./">Muhammad Huzaifa Shafique</a>
-<nav aria-label="Main"><a href="./#projects">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+<nav aria-label="Main"><a href="./#projects">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="Muhammad_Huzaifa_Shafique_CV.pdf">CV</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
 </div></header>
 <main id="main"><div class="wrap">
 
 <section class="hero sm" aria-labelledby="h1">
-<p class="crumb"><a href="./#more">Data engineering</a> / Oklahoma legislature vote extractor</p>
-<h1 id="h1" style="max-width:24ch">Oklahoma legislature vote extractor, and the checks I ran on its output</h1>
+<p class="crumb"><a href="./#more">Data engineering</a> / Oklahoma Legislature Vote Extractor</p>
+<h1 id="h1" style="max-width:24ch">Oklahoma Legislature Vote Extractor, and the checks I ran on its output</h1>
 <p class="lede">A Python tool that collects House and Senate vote records from the Oklahoma legislature's public pages and writes three CSV files: one row per vote, one row per member's vote, and a list of members. It was a team project with classmates in a graduate course (GRT713), and my part was the House votes. This page shows what the House output contains and where it falls short.</p>
-<p class="links"><a href="#checks">See the checks</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor">Source code</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor/blob/main/audit_output.py">The check script</a><a href="#fixed">Fixed-width extractor</a></p>
+<p class="links"><a href="#checks">See the checks</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor">Source code</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor/blob/main/audit_output.py">The check script</a><a href="#fixed">Fixed-Width Data Extractor</a></p>
 <p class="rel"><b>Relevant to:</b> web scraping (asyncio, aiohttp), parsing semi-structured text with regular expressions, data cleaning, data validation and data-quality checks, reconciling two tables, pandas, tidy CSV output.</p>
 </section>
 
@@ -133,7 +133,7 @@ pre.smp{font-size:.78rem;line-height:1.45}
 <p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor">Source code</a><a href="https://github.com/Muhammad-Huzaifa-Shafique/Oklahoma-Legislature-Vote-Extractor/blob/main/audit_output.py">audit_output.py</a></p>
 </div></div></section>
 
-<section class="sec" id="fixed" aria-labelledby="h-fx"><div class="row"><h2 id="h-fx">Fixed-width data extractor</h2><div class="body">
+<section class="sec" id="fixed" aria-labelledby="h-fx"><div class="row"><h2 id="h-fx">Fixed-Width Data Extractor</h2><div class="body">
 <p>A second data-preparation script, written for the same course together with a classmate. It turns a fixed-width text report into a clean Excel table: it finds the columns from the report's header, rebuilds rows that wrap across several lines, and saves a formatted <code>.xlsx</code> file next to the input. We compared our outputs on the course file and they matched.</p>
 <ol class="steps">
 <li><span><b>Find the columns.</b> The header line with the most gaps of four or more spaces is the template, and each gap marks a column boundary.</span></li>

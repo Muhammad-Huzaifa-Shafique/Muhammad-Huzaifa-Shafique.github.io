@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sales forecasting with a neural network | Muhammad Huzaifa Shafique</title>
+<title>Sales Forecasting Neural Network: interactive model comparison | Muhammad Huzaifa Shafique</title>
 <meta name="description" content="A scikit-learn neural network (MLPRegressor) that forecasts monthly sales for ten items, tested against four baselines on 12 unseen months. Interactive model comparison with MAE, RMSE, WAPE and bias, plus the limits.">
 <meta name="author" content="Muhammad Huzaifa Shafique">
 <meta name="robots" content="index,follow,max-snippet:-1">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#080b13">
 <link rel="canonical" href="https://muhammad-huzaifa-shafique.github.io/forecasting.html">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Sales forecasting with a neural network">
+<meta property="og:title" content="Sales Forecasting Neural Network">
 <meta property="og:description" content="Five model versions and four baselines on 12 unseen months, with the rejected variant left in the results.">
 <meta property="og:url" content="https://muhammad-huzaifa-shafique.github.io/forecasting.html">
 <meta name="twitter:card" content="summary">
@@ -27,20 +27,20 @@
 @media (max-width:860px){.hb{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) 3.2rem}}
 </style>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Sales forecasting with a neural network","url":"https://muhammad-huzaifa-shafique.github.io/forecasting.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Time-series forecasting","Neural networks","Feature engineering","Model evaluation","Baselines"],"keywords":"time-series forecasting, neural network, MLPRegressor, scikit-learn, feature engineering, lag features, rolling features, WAPE, MAE, RMSE, bias, baselines, hold-out evaluation, ensemble","isBasedOn":{"@type":"SoftwareSourceCode","name":"Sales-Forecasting-Neural-Network","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network"}}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Sales Forecasting Neural Network","url":"https://muhammad-huzaifa-shafique.github.io/forecasting.html","author":{"@type":"Person","name":"Muhammad Huzaifa Shafique","url":"https://muhammad-huzaifa-shafique.github.io/"},"about":["Time-series forecasting","Neural networks","Feature engineering","Model evaluation","Baselines"],"keywords":"time-series forecasting, neural network, MLPRegressor, scikit-learn, feature engineering, lag features, rolling features, WAPE, MAE, RMSE, bias, baselines, hold-out evaluation, ensemble","isBasedOn":{"@type":"SoftwareSourceCode","name":"Sales-Forecasting-Neural-Network","programmingLanguage":"Python","codeRepository":"https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network"}}
 </script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top"><div class="wrap">
 <a class="mark" href="./">Muhammad Huzaifa Shafique</a>
-<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
+<nav aria-label="Main"><a href="./#projects" aria-current="page">Projects</a><a href="deep-learning.html">Neural nets</a><a href="method.html">How I build</a><a href="./#skills">Skills</a><a href="./#contact">Contact</a><a href="Muhammad_Huzaifa_Shafique_CV.pdf">CV</a><a href="https://github.com/Muhammad-Huzaifa-Shafique">GitHub</a></nav>
 </div></header>
 <main id="main"><div class="wrap">
 
 <section class="hero sm" aria-labelledby="h1">
-<p class="crumb"><a href="./#projects">Main projects</a> / Sales forecasting</p>
-<h1 id="h1" style="max-width:24ch">Sales forecasting with a neural network</h1>
+<p class="crumb"><a href="./#projects">Main projects</a> / Sales Forecasting Neural Network</p>
+<h1 id="h1" style="max-width:24ch">Sales Forecasting Neural Network</h1>
 <p class="lede">A scikit-learn neural network that forecasts monthly sales for ten items from 2019 to 2024 order history. The sales data belongs to a company and stays private, so the repository holds the code and the error figures. I built it as a quiz project for a graduate course.</p>
 <p class="links"><a href="https://github.com/Muhammad-Huzaifa-Shafique/Sales-Forecasting-Neural-Network">Source code</a><a href="#compare">Jump to the comparison</a></p>
 <p class="rel"><b>Relevant to:</b> time-series forecasting, feature engineering (lags, rolling statistics, seasonality), neural networks (scikit-learn MLPRegressor), ensembles, model evaluation against baselines (MAE, RMSE, WAPE, bias), leakage control, honest reporting.</p>
